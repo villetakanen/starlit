@@ -33,6 +33,25 @@ function xOfL(l: number): number {
   return xOfIndex(STEPS.length - 1);
 }
 
+/** Catmull-Rom spline through the points, as an SVG cubic-bezier path. */
+function smoothPath(pts: { x: number; y: number }[]): string {
+  const d = [`M ${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[Math.min(pts.length - 1, i + 2)];
+    const c1x = p1.x + (p2.x - p0.x) / 6;
+    const c1y = p1.y + (p2.y - p0.y) / 6;
+    const c2x = p2.x - (p3.x - p1.x) / 6;
+    const c2y = p2.y - (p3.y - p1.y) / 6;
+    d.push(
+      `C ${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`,
+    );
+  }
+  return d.join(" ");
+}
+
 /** Map a click fraction of the svg's width to the nearest step index. */
 export function fractionToStepIndex(fraction: number): number {
   const i = Math.round(((fraction * W - MX) / (W - 2 * MX)) * (STEPS.length - 1));
@@ -81,6 +100,15 @@ export function renderTelemetry(
     chromaPts.push(`${xOfL(l).toFixed(1)},${y.toFixed(1)}`);
   }
   const chromaTrace = `<polyline class="trace-chroma" points="${chromaPts.join(" ")}"/>`;
+
+  // Luminance trace: L per step on the equidistant axis (0 bottom,
+  // 100 top). Static by nature — it IS the bespoke step spacing —
+  // drawn as a smooth Catmull-Rom curve through the step points.
+  const lumPoints = STEPS.map((step, i) => ({
+    x: xOfIndex(i),
+    y: chromaBottom - (step / 100) * (chromaBottom - chromaTop),
+  }));
+  const lumTrace = `<path class="trace-lum" d="${smoothPath(lumPoints)}"/>`;
   const midY = SCREEN.top + SCREEN.height / 2;
   const halfY = SCREEN.height / 2 - 14;
   const shiftPts = shifts
@@ -133,6 +161,7 @@ export function renderTelemetry(
   <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Waveform telemetry">
     <rect class="screen" x="0" y="${SCREEN.top}" width="${W}" height="${SCREEN.height}" rx="8"/>
     ${grid}
+    ${lumTrace}
     ${shiftTrace}
     ${chromaTrace}
     ${selected}

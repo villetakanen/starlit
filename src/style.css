@@ -298,6 +298,21 @@ body {
   margin-left: 8px;
 }
 
+.telemetry-legend .legend-line.dotted {
+  background: none;
+  height: 0;
+  border-top: 2px dashed color-mix(in oklab, var(--color-surface-100) 40%, transparent);
+  margin-left: 8px;
+}
+
+#telemetry .trace-lum {
+  fill: none;
+  stroke: color-mix(in oklab, var(--color-surface-100) 24%, transparent);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 4 4;
+}
+
 #telemetry .trace-shift {
   fill: none;
   stroke: var(--color-surface-70);
