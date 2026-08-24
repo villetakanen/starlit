@@ -5,6 +5,6 @@ pre-commit:
   parallel: false
   jobs:
     - name: biome
-      run: npx biome check .
+      run: npx biome check --error-on-warnings .
     - name: build
       run: npm run build

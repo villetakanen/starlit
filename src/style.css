@@ -485,10 +485,6 @@ body {
   grid-column: 1 / -1;
 }
 
-.osd-strip .meter-track {
-  background: color-mix(in oklab, var(--color-surface-100) 12%, transparent);
-}
-
 .osd-strip .value {
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -543,6 +539,10 @@ body {
   border-radius: 2px;
   background: var(--color-surface-0);
   overflow: hidden;
+}
+
+.osd-strip .meter-track {
+  background: color-mix(in oklab, var(--color-surface-100) 12%, transparent);
 }
 
 .meter-fill {
