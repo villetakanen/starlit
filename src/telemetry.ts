@@ -71,7 +71,7 @@ export function renderTelemetry(
   // true colour and curls back to zero at black and white. Signed by
   // the direction of the hue drift (shadow vs solar).
   const RAD = Math.PI / 180;
-  const anchorHue = hueAtUnwrapped(50, p);
+  const anchorHue = hueAtUnwrapped(p.anchorL, p);
   const a0 = Math.cos(anchorHue * RAD);
   const b0 = Math.sin(anchorHue * RAD);
   const shifts: number[] = [];

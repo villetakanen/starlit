@@ -71,9 +71,9 @@ tasks marked with a dependency must follow it. One task = one commit.
 - **Test:** Rowan Berry plots a single smooth curve with no vertical jump
   at the 0° crossing; the selected swatch's dot is emphasized.
 
-## 7. Movable pigment anchor — engine (depends on 1)
+## 7. ✅ Movable pigment anchor — engine (depends on 1)
 
-- [ ] **Why:** real materials don't all anchor at L=50 (citrus ~70,
+- [x] **Why:** real materials don't all anchor at L=50 (citrus ~70,
       deep berry ~40); currently hard-coded.
 - **Change:** add `anchorL` (30–70, default 50) to `ScaleParams`; `hueAt`
   segments become 10→anchorL and anchorL→90; `chromaAt` bell centers on
@@ -82,9 +82,9 @@ tasks marked with a dependency must follow it. One task = one commit.
   peaks at the step nearest `anchorL` for anchorL ∈ {30, 50, 70}; all
   task-1 invariants still pass.
 
-## 8. Movable pigment anchor — UI (depends on 7)
+## 8. ✅ Movable pigment anchor — UI (depends on 7)
 
-- [ ] **Why:** expose the engine capability.
+- [x] **Why:** expose the engine capability.
 - **Change:** segmented control (30/40/50/60/70) in the controls card;
   wire to state and `syncControls`.
 - **Test:** selecting 70 visibly moves peak saturation up the strip; the

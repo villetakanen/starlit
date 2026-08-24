@@ -10,8 +10,10 @@
 export interface ScaleParams {
   /** Token family name, used as `--chroma-<name>-<step>`. */
   name: string;
-  /** Local material anchor hue at L=50 (degrees). */
+  /** Local material anchor hue (degrees) — the true pigment. */
   anchorHue: number;
+  /** Lightness step where the true pigment sits, 20–80. */
+  anchorL: number;
   /**
    * Solar highlight hue at L=90, bound to the Planckian solar arc
    * (75°–105°): atmospheric extinction shifts sunlight from
@@ -60,6 +62,7 @@ export const PRESETS: Preset[] = [
   {
     label: "Deep Nordic Forest",
     name: "forest",
+    anchorL: 50,
     anchorHue: 145,
     solarHue: 105,
     skyFactor: 0.45,
@@ -70,6 +73,7 @@ export const PRESETS: Preset[] = [
   {
     label: "Rowan Berry",
     name: "rowan",
+    anchorL: 50,
     anchorHue: 38,
     solarHue: 92,
     skyFactor: 1.0,
@@ -80,6 +84,7 @@ export const PRESETS: Preset[] = [
   {
     label: "Hanami Sakura",
     name: "sakura",
+    anchorL: 50,
     anchorHue: 5,
     solarHue: 75,
     skyFactor: 1.0,
@@ -90,6 +95,7 @@ export const PRESETS: Preset[] = [
   {
     label: "Citrus Fruit",
     name: "citrus",
+    anchorL: 50,
     anchorHue: 60,
     solarHue: 95,
     skyFactor: 0.85,
@@ -100,6 +106,7 @@ export const PRESETS: Preset[] = [
   {
     label: "Urban Asphalt",
     name: "asphalt",
+    anchorL: 50,
     anchorHue: 240,
     solarHue: 85,
     skyFactor: 1.0,
@@ -110,6 +117,7 @@ export const PRESETS: Preset[] = [
   {
     label: "Blueberry",
     name: "blueberry",
+    anchorL: 50,
     anchorHue: 264,
     solarHue: 95,
     skyFactor: 0.9,
@@ -159,8 +167,8 @@ export function hueAtUnwrapped(l: number, p: ScaleParams): number {
   const toSolar = shortestDelta(p.anchorHue, p.solarHue);
   const base = normalizeHue(shadowHue);
   if (l <= 10) return base;
-  if (l <= 50) return base + toAnchor * smoothstep((l - 10) / 40);
-  if (l <= 90) return base + toAnchor + toSolar * smoothstep((l - 50) / 40);
+  if (l <= p.anchorL) return base + toAnchor * smoothstep((l - 10) / (p.anchorL - 10));
+  if (l <= 90) return base + toAnchor + toSolar * smoothstep((l - p.anchorL) / (90 - p.anchorL));
   return base + toAnchor + toSolar;
 }
 
@@ -175,7 +183,7 @@ export function hueAt(l: number, p: ScaleParams): number {
  * L=99 stays a warm tinted off-white and midtones never go grey.
  */
 export function chromaAt(l: number, p: ScaleParams): number {
-  const bell = p.peakChroma * Math.exp(-(((l - 48) / 34) ** 2));
+  const bell = p.peakChroma * Math.exp(-(((l - p.anchorL) / 34) ** 2));
   const flare = 0.11 * p.glimmer * Math.exp(-(((l - 88) / 7) ** 2));
   return Math.min(0.37, (bell + flare) * chromaDamp(l));
 }
@@ -186,7 +194,7 @@ export function chromaAt(l: number, p: ScaleParams): number {
  * that the sunlight effect is measured against.
  */
 export function chromaBaseAt(l: number, p: ScaleParams): number {
-  const bell = p.peakChroma * Math.exp(-(((l - 48) / 34) ** 2));
+  const bell = p.peakChroma * Math.exp(-(((l - p.anchorL) / 34) ** 2));
   return Math.min(0.37, bell * chromaDamp(l));
 }
 

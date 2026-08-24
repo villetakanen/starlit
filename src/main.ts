@@ -37,13 +37,21 @@ const copyBtn = $<HTMLButtonElement>("#copy");
 const nameInput = $<HTMLInputElement>("#name");
 const subsurfaceInput = $<HTMLInputElement>("#subsurface");
 
-type SliderKey = "anchorHue" | "solarHue" | "skyFactor" | "peakChroma" | "glimmer";
-const SLIDERS: SliderKey[] = ["anchorHue", "solarHue", "skyFactor", "peakChroma", "glimmer"];
+type SliderKey = "anchorHue" | "anchorL" | "solarHue" | "skyFactor" | "peakChroma" | "glimmer";
+const SLIDERS: SliderKey[] = [
+  "anchorHue",
+  "anchorL",
+  "solarHue",
+  "skyFactor",
+  "peakChroma",
+  "glimmer",
+];
 
 function formatValue(key: SliderKey, value: number): string {
   if (key === "peakChroma") return value.toFixed(3);
   if (key === "glimmer") return `${value.toFixed(2)}×`;
   if (key === "skyFactor") return `${Math.round(value * 100)}%`;
+  if (key === "anchorL") return `L${Math.round(value)}`;
   return `${Math.round(value)}°`;
 }
 
@@ -69,7 +77,7 @@ function renderPresets(): void {
       name.textContent = preset.label;
       const info = document.createElement("span");
       info.className = "preset-info";
-      info.textContent = `${Math.round(shadowHueOf(preset))}°→${preset.anchorHue}°→${preset.solarHue}° · L50`;
+      info.textContent = `${Math.round(shadowHueOf(preset))}°→${preset.anchorHue}°→${preset.solarHue}° · L${preset.anchorL}`;
       btn.append(name, info);
       btn.addEventListener("click", () => {
         Object.assign(state, preset);
