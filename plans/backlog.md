@@ -116,9 +116,13 @@ tasks marked with a dependency must follow it. One task = one commit.
 - **Test:** on desktop, hovering a swatch shows feedback; in devtools
   touch emulation, tapping leaves no stuck hover state.
 
-## 13. Keyboard navigation for the swatch strip
+## 13. ✅ Keyboard navigation for the swatch strip
 
-- [ ] **Why:** swatches are buttons (tabbable) but 13 tab stops is
+> Landed in two parts: the arrow/Home/End handler came in with an earlier
+> commit, the roving tabindex closing it out. Strip stays a fieldset of
+> `aria-pressed` buttons rather than a listbox.
+
+- [x] **Why:** swatches are buttons (tabbable) but 13 tab stops is
       hostile; arrow keys are the expected pattern.
 - **Change:** roving tabindex on the strip — ArrowUp/ArrowDown (and
   Left/Right) move selection, Home/End jump to 0/100; strip container

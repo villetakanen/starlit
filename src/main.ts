@@ -147,6 +147,8 @@ function anchorStepOf(anchorL: number): number {
 function render(): void {
   const swatches = buildScale(state);
   const anchorStep = anchorStepOf(state.anchorL);
+  const selected =
+    swatches.find((s) => s.step === selectedStep) ?? swatches[Math.floor(swatches.length / 2)];
   stripEl.replaceChildren(
     ...swatches.map((swatch) => {
       const isAnchor = swatch.step === anchorStep;
@@ -159,6 +161,8 @@ function render(): void {
         `${swatch.token}: ${swatch.css}${isAnchor ? " — pigment anchor" : ""}`,
       );
       btn.setAttribute("aria-pressed", String(swatch.step === selectedStep));
+      // Roving tabindex: the strip is one tab stop, arrow keys move within it.
+      btn.tabIndex = swatch.step === selected.step ? 0 : -1;
       const contrast = swatch.l > 55 ? "on-light" : "on-dark";
       if (isAnchor) {
         const dot = document.createElement("span");
@@ -176,8 +180,6 @@ function render(): void {
       return btn;
     }),
   );
-  const selected =
-    swatches.find((s) => s.step === selectedStep) ?? swatches[Math.floor(swatches.length / 2)];
   renderInspector(selected, swatches[0], swatches[swatches.length - 1]);
   renderTelemetry(telemetryEl, state, swatches, selectedStep);
   cssEl.textContent = toCssBlock(swatches);
