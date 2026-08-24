@@ -25,27 +25,27 @@ tasks marked with a dependency must follow it. One task = one commit.
   `--unsafely-treat-insecure-origin-as-secure` disabled; Copy CSS still
   puts the block on the clipboard and shows "Copied ✓".
 
-## 3. Active preset indication
+## 3. ✅ Active preset indication
 
-- [ ] **Why:** no feedback for which preset is applied or that slider
+- [x] **Why:** no feedback for which preset is applied or that slider
       edits have diverged from it.
 - **Change:** track applied preset in state; add `aria-pressed` + a
   selected style to the matching chip; clear it on any slider/name edit.
 - **Test:** tap Rowan Berry → chip highlights; move any slider →
   highlight clears; tap it again → highlight returns.
 
-## 4. Per-swatch hue readout
+## 4. ✅ Per-swatch hue readout
 
-- [ ] **Why:** the hue rotation — the product's core feature — is
+- [x] **Why:** the hue rotation — the product's core feature — is
       invisible without tapping every step.
 - **Change:** render `h°` (and step) on each swatch row in the strip,
   right-aligned, using the existing on-light/on-dark contrast classes.
 - **Test:** with Nordic Forest, strip shows 190° at step 10 descending to
   105° at step 90+; values update live while dragging the anchor slider.
 
-## 5. Gradient continuity strip
+## 5. ✅ Gradient continuity strip
 
-- [ ] **Why:** instant visual smoke test for banding, flips, and grey
+- [x] **Why:** instant visual smoke test for banding, flips, and grey
       dead zones.
 - **Change:** a full-width bar under the swatch strip:
   `linear-gradient(to right, <css> <step>%, …)` built from the 13 swatches.
@@ -100,9 +100,9 @@ tasks marked with a dependency must follow it. One task = one commit.
 - **Test:** tapping step 20 shows light-on-dark preview; step 90 shows
   dark-on-light; text remains readable across all 13 steps of all presets.
 
-## 11. Desktop layout ≥768px (mobile-first, not mobile-only)
+## 11. ✅ Desktop layout ≥768px (mobile-first, not mobile-only)
 
-- [ ] **Why:** current single column caps at 480px — mobile-only shipped
+- [x] **Why:** current single column caps at 480px — mobile-only shipped
       to desktop. Wider viewports should show tuning and results at once.
 - **Change:** CSS-only `@media (min-width: 768px)`: two-pane grid — strip
   + arc plot + inspector left, controls + CSS output right; raise
@@ -111,9 +111,9 @@ tasks marked with a dependency must follow it. One task = one commit.
 - **Test:** at 390px nothing changes; at 1024px both panes visible with
   no vertical scroll needed to see strip and sliders together.
 
-## 12. Hover affordances gated on pointer (depends on 11)
+## 12. ✅ Hover affordances gated on pointer (depends on 11)
 
-- [ ] **Why:** hover styles on touch devices cause sticky-hover bugs;
+- [x] **Why:** hover styles on touch devices cause sticky-hover bugs;
       desktop currently has no hover feedback at all.
 - **Change:** wrap hover styles (swatch brightness lift, preset border)
   in `@media (hover: hover) and (pointer: fine)`.
