@@ -1,10 +1,29 @@
 :root {
   color-scheme: dark;
-  --bg: oklch(17% 0.012 260);
-  --surface: oklch(22% 0.014 260);
-  --surface-2: oklch(27% 0.016 260);
-  --text: oklch(93% 0.01 90);
-  --text-dim: oklch(70% 0.015 260);
+
+  /* Surface scale: linear OKLCH interpolation between the two brand poles,
+     #12161A (level 0) and #FFF5F7 (level 100). The neutral hue drifts
+     248° → 3.5° along the way — the site palette hue-shifts like the
+     scales it generates. */
+  --color-surface-0: oklch(19.78% 0.0102 248.3);
+  --color-surface-10: oklch(27.58% 0.0103 259.9);
+  --color-surface-20: oklch(35.39% 0.0103 271.4);
+  --color-surface-30: oklch(43.2% 0.0104 282.9);
+  --color-surface-40: oklch(51% 0.0105 294.4);
+  --color-surface-50: oklch(58.81% 0.0106 305.9);
+  --color-surface-60: oklch(66.62% 0.0107 317.4);
+  --color-surface-70: oklch(74.43% 0.0108 328.9);
+  --color-surface-80: oklch(82.23% 0.0109 340.5);
+  --color-surface-90: oklch(90.04% 0.0109 352);
+  --color-surface-95: oklch(93.94% 0.011 357.7);
+  --color-surface-99: oklch(97.07% 0.011 2.3);
+  --color-surface-100: oklch(97.85% 0.011 3.5);
+
+  --bg: var(--color-surface-0);
+  --surface: var(--color-surface-10);
+  --surface-2: var(--color-surface-20);
+  --text: var(--color-surface-100);
+  --text-dim: var(--color-surface-70);
   --accent: oklch(78% 0.14 92);
   --radius: 14px;
   --font-ui: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -128,11 +147,11 @@ body {
 }
 
 .swatch .on-dark {
-  color: oklch(98% 0.01 90 / 0.85);
+  color: color-mix(in oklab, var(--color-surface-100) 88%, transparent);
 }
 
 .swatch .on-light {
-  color: oklch(20% 0.02 260 / 0.85);
+  color: color-mix(in oklab, var(--color-surface-0) 88%, transparent);
 }
 
 .swatch .hue {
@@ -158,7 +177,7 @@ body {
   height: 56px;
   border-radius: 12px;
   flex: 0 0 auto;
-  box-shadow: inset 0 0 0 1px oklch(100% 0 0 / 0.08);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-surface-100) 8%, transparent);
 }
 
 .inspector-meta {
@@ -334,7 +353,7 @@ input[type="range"]::-moz-range-thumb {
   }
 
   .swatch:hover {
-    box-shadow: inset 0 0 0 2px oklch(100% 0 0 / 0.35);
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--color-surface-100) 35%, transparent);
   }
 
   #copy:hover {
