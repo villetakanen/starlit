@@ -294,3 +294,51 @@ input[type="range"]::-moz-range-thumb {
   line-height: 1.6;
   color: var(--text-dim);
 }
+
+/* Desktop: two panes — scale on the left, tuning and output on the right.
+   Everything below 768px stays the untouched mobile-first base. */
+@media (min-width: 768px) {
+  #app {
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 28px;
+    align-items: start;
+    grid-template-areas:
+      "header header"
+      "presets presets"
+      "strip controls"
+      "gradient controls"
+      "inspector controls"
+      "inspector output";
+  }
+
+  .app-header {
+    grid-area: header;
+  }
+
+  .presets {
+    grid-area: presets;
+  }
+
+  .strip {
+    grid-area: strip;
+  }
+
+  .gradient {
+    grid-area: gradient;
+  }
+
+  .inspector {
+    grid-area: inspector;
+    align-self: start;
+  }
+
+  .controls {
+    grid-area: controls;
+  }
+
+  .output {
+    grid-area: output;
+  }
+}
