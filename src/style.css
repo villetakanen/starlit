@@ -1,22 +1,23 @@
 :root {
   color-scheme: dark;
 
-  /* Surface scale: linear OKLCH interpolation between the two brand poles,
-     #12161A (level 0) and #FFF5F7 (level 100). The neutral hue drifts
-     248° → 3.5° along the way — the site palette hue-shifts like the
-     scales it generates. */
+  /* Surface scale between the two brand poles, #12161A (level 0) and
+     #FFF5F7 (level 100). L and C interpolate linearly; hue holds the
+     dark pole's blue (248.3°) through levels 0–30 and the light pole's
+     pink (3.5°) through 95–100, with the full 115° rotation compressed
+     into the midtones (40–90) for a more pronounced shift. */
   --color-surface-0: oklch(19.78% 0.0102 248.3);
-  --color-surface-10: oklch(27.58% 0.0103 259.9);
-  --color-surface-20: oklch(35.39% 0.0103 271.4);
-  --color-surface-30: oklch(43.2% 0.0104 282.9);
-  --color-surface-40: oklch(51% 0.0105 294.4);
-  --color-surface-50: oklch(58.81% 0.0106 305.9);
-  --color-surface-60: oklch(66.62% 0.0107 317.4);
-  --color-surface-70: oklch(74.43% 0.0108 328.9);
-  --color-surface-80: oklch(82.23% 0.0109 340.5);
-  --color-surface-90: oklch(90.04% 0.0109 352);
-  --color-surface-95: oklch(93.94% 0.011 357.7);
-  --color-surface-99: oklch(97.07% 0.011 2.3);
+  --color-surface-10: oklch(27.58% 0.0102 248.3);
+  --color-surface-20: oklch(35.39% 0.0103 248.3);
+  --color-surface-30: oklch(43.2% 0.0104 248.3);
+  --color-surface-40: oklch(51% 0.0105 266.1);
+  --color-surface-50: oklch(58.81% 0.0106 283.8);
+  --color-surface-60: oklch(66.62% 0.0107 301.5);
+  --color-surface-70: oklch(74.43% 0.0107 319.2);
+  --color-surface-80: oklch(82.23% 0.0108 336.9);
+  --color-surface-90: oklch(90.04% 0.0109 354.6);
+  --color-surface-95: oklch(93.94% 0.0109 3.5);
+  --color-surface-99: oklch(97.07% 0.011 3.5);
   --color-surface-100: oklch(97.85% 0.011 3.5);
 
   --bg: var(--color-surface-0);
