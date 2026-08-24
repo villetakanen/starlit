@@ -12,7 +12,6 @@ const MX = 14;
 const SCREEN = { top: 0, height: 152 };
 const AXIS = { label: 168 };
 const H = 176;
-const GRID_GAP = 16;
 
 const xOfIndex = (i: number): number => MX + (i / (STEPS.length - 1)) * (W - 2 * MX);
 
@@ -26,24 +25,25 @@ export function renderTelemetry(
   container: HTMLElement,
   _p: ScaleParams,
   swatches: Swatch[],
-  _selectedStep: number,
+  selectedStep: number,
 ): void {
+  const grid = STEPS.map((_, i) => {
+    const cx = xOfIndex(i).toFixed(1);
+    return `<line class="grid-line" x1="${cx}" y1="${SCREEN.top + 10}" x2="${cx}" y2="${SCREEN.top + SCREEN.height - 10}"/>`;
+  }).join("");
+
   const axis = swatches
-    .map(
-      (s, i) => `
-        <text class="axis-label" x="${xOfIndex(i).toFixed(1)}" y="${AXIS.label}" text-anchor="middle">${s.step}</text>`,
-    )
+    .map((s, i) => {
+      const selected = s.step === selectedStep;
+      return `
+        <text class="axis-label${selected ? " selected" : ""}" x="${xOfIndex(i).toFixed(1)}" y="${AXIS.label}" text-anchor="middle">${s.step}</text>`;
+    })
     .join("");
 
   container.innerHTML = `
   <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Waveform telemetry">
-    <defs>
-      <pattern id="scope-dots" width="${GRID_GAP}" height="${GRID_GAP}" patternUnits="userSpaceOnUse">
-        <circle cx="${GRID_GAP / 2}" cy="${GRID_GAP / 2}" r="0.75" class="grid-dot"/>
-      </pattern>
-    </defs>
     <rect class="screen" x="0" y="${SCREEN.top}" width="${W}" height="${SCREEN.height}" rx="8"/>
-    <rect x="0" y="${SCREEN.top}" width="${W}" height="${SCREEN.height}" rx="8" fill="url(#scope-dots)"/>
+    ${grid}
     ${axis}
   </svg>`;
 }

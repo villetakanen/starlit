@@ -265,8 +265,11 @@ body {
   fill: var(--color-surface-0);
 }
 
-#telemetry .grid-dot {
-  fill: color-mix(in oklab, var(--color-surface-100) 10%, transparent);
+#telemetry .grid-line {
+  stroke: color-mix(in oklab, var(--color-surface-100) 22%, transparent);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 0 5;
 }
 
 #telemetry .lane-label {
@@ -329,6 +332,11 @@ body {
   font-family: var(--font-mono);
   font-size: 7px;
   fill: var(--text-dim);
+}
+
+#telemetry .axis-label.selected {
+  fill: var(--color-surface-100);
+  font-weight: 700;
 }
 
 #telemetry .chip.selected {
