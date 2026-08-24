@@ -15,6 +15,17 @@ const H = 176;
 
 const xOfIndex = (i: number): number => MX + (i / (STEPS.length - 1)) * (W - 2 * MX);
 
+/** Map a lightness value onto the equidistant-step axis, piecewise. */
+function xOfL(l: number): number {
+  for (let i = 0; i < STEPS.length - 1; i++) {
+    if (l <= STEPS[i + 1]) {
+      const t = (l - STEPS[i]) / (STEPS[i + 1] - STEPS[i]);
+      return xOfIndex(i) + t * (xOfIndex(i + 1) - xOfIndex(i));
+    }
+  }
+  return xOfIndex(STEPS.length - 1);
+}
+
 /** Map a click fraction of the svg's width to the nearest step index. */
 export function fractionToStepIndex(fraction: number): number {
   const i = Math.round(((fraction * W - MX) / (W - 2 * MX)) * (STEPS.length - 1));
@@ -27,10 +38,27 @@ export function renderTelemetry(
   swatches: Swatch[],
   selectedStep: number,
 ): void {
-  const grid = STEPS.map((_, i) => {
-    const cx = xOfIndex(i).toFixed(1);
-    return `<line class="grid-line" x1="${cx}" y1="${SCREEN.top + 10}" x2="${cx}" y2="${SCREEN.top + SCREEN.height - 10}"/>`;
-  }).join("");
+  // The L ruler: a gridline every 2 units of lightness, projected onto
+  // the equidistant step axis. Dense where a step gap spans many L
+  // units (10→20), absent where it spans few (99→100).
+  const gridY1 = SCREEN.top + 10;
+  const gridY2 = SCREEN.top + SCREEN.height - 10;
+  const gridLines: string[] = [];
+  for (let l = 0; l <= 100; l += 2) {
+    const gx = xOfL(l).toFixed(1);
+    const major = l % 10 === 0 ? " major" : "";
+    gridLines.push(
+      `<line class="grid-l${major}" x1="${gx}" y1="${gridY1}" x2="${gx}" y2="${gridY2}"/>`,
+    );
+  }
+  const grid = gridLines.join("");
+
+  const selIdx = STEPS.indexOf(selectedStep);
+  const sx = xOfIndex(selIdx < 0 ? 5 : selIdx).toFixed(1);
+  const selected = `
+    <line class="grid-l major" x1="${sx}" y1="${gridY1}" x2="${sx}" y2="${gridY2}"/>
+    <circle class="led-halo" cx="${sx}" cy="${gridY2}" r="4.5"/>
+    <circle class="led" cx="${sx}" cy="${gridY2}" r="2.25"/>`;
 
   const axis = swatches
     .map((s, i) => {
@@ -44,6 +72,7 @@ export function renderTelemetry(
   <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Waveform telemetry">
     <rect class="screen" x="0" y="${SCREEN.top}" width="${W}" height="${SCREEN.height}" rx="8"/>
     ${grid}
+    ${selected}
     ${axis}
   </svg>`;
 }

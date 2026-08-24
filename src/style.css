@@ -265,11 +265,22 @@ body {
   fill: var(--color-surface-0);
 }
 
-#telemetry .grid-line {
-  stroke: color-mix(in oklab, var(--color-surface-100) 22%, transparent);
-  stroke-width: 1;
-  stroke-linecap: round;
-  stroke-dasharray: 0 5;
+#telemetry .grid-l {
+  stroke: color-mix(in oklab, var(--color-surface-100) 10%, transparent);
+  stroke-width: 0.5;
+}
+
+#telemetry .grid-l.major {
+  stroke: color-mix(in oklab, var(--color-surface-100) 24%, transparent);
+}
+
+#telemetry .led {
+  fill: var(--accent);
+}
+
+#telemetry .led-halo {
+  fill: var(--accent);
+  opacity: 0.25;
 }
 
 #telemetry .lane-label {
