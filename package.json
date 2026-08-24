@@ -3,7 +3,7 @@
   "description": "Mobile-first studio for hue-shifting OKLCH color token scales",
   "license": "MIT",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
