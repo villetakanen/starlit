@@ -177,9 +177,23 @@ export function hueAt(l: number, p: ScaleParams): number {
 export function chromaAt(l: number, p: ScaleParams): number {
   const bell = p.peakChroma * Math.exp(-(((l - 48) / 34) ** 2));
   const flare = 0.11 * p.glimmer * Math.exp(-(((l - 88) / 7) ** 2));
+  return Math.min(0.37, (bell + flare) * chromaDamp(l));
+}
+
+/**
+ * Chroma of the un-sunlit pigment: the bell alone, no solar glimmer
+ * flare. Paired with the anchor hue this is the "true colour" baseline
+ * that the sunlight effect is measured against.
+ */
+export function chromaBaseAt(l: number, p: ScaleParams): number {
+  const bell = p.peakChroma * Math.exp(-(((l - 48) / 34) ** 2));
+  return Math.min(0.37, bell * chromaDamp(l));
+}
+
+function chromaDamp(l: number): number {
   const lowDamp = 0.15 + 0.85 * Math.min(1, l / 10);
   const highDamp = Math.min(1, (100 - l) / 1.5);
-  return Math.min(0.37, (bell + flare) * lowDamp * highDamp);
+  return lowDamp * highDamp;
 }
 
 export function buildScale(p: ScaleParams): Swatch[] {

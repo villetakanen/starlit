@@ -1,4 +1,11 @@
-import { hueAtUnwrapped, type ScaleParams, STEPS, type Swatch } from "./scale.ts";
+import {
+  chromaAt,
+  chromaBaseAt,
+  hueAtUnwrapped,
+  type ScaleParams,
+  STEPS,
+  type Swatch,
+} from "./scale.ts";
 
 /**
  * Waveform telemetry — being rebuilt element by element (divide et
@@ -38,13 +45,25 @@ export function renderTelemetry(
   swatches: Swatch[],
   selectedStep: number,
 ): void {
-  // Sunlight shift: how far the applied light has rotated the hue away
-  // from the true (anchor) colour. Zero at the anchor, drifting toward
-  // the shadow hue one way and the solar hue the other.
+  // Sunlight shift: the perceptual distance (OKLab a/b plane) between
+  // the actual colour and the un-sunlit pigment (anchor hue, bell
+  // chroma) at the same L. Hue rotation is weighted by chroma — pure
+  // white of 303° IS pure white of 15° — so the curve is zero at the
+  // true colour and curls back to zero at black and white. Signed by
+  // the direction of the hue drift (shadow vs solar).
+  const RAD = Math.PI / 180;
   const anchorHue = hueAtUnwrapped(50, p);
+  const a0 = Math.cos(anchorHue * RAD);
+  const b0 = Math.sin(anchorHue * RAD);
   const shifts: number[] = [];
-  for (let l = 0; l <= 100; l += 1) shifts.push(hueAtUnwrapped(l, p) - anchorHue);
-  const maxShift = Math.max(10, ...shifts.map(Math.abs)) * 1.15;
+  for (let l = 0; l <= 100; l += 1) {
+    const h = hueAtUnwrapped(l, p);
+    const c = chromaAt(l, p);
+    const c0 = chromaBaseAt(l, p);
+    const d = Math.hypot(c * Math.cos(h * RAD) - c0 * a0, c * Math.sin(h * RAD) - c0 * b0);
+    shifts.push((Math.sign(h - anchorHue) || 1) * d);
+  }
+  const maxShift = Math.max(0.02, ...shifts.map(Math.abs)) * 1.15;
   const midY = SCREEN.top + SCREEN.height / 2;
   const halfY = SCREEN.height / 2 - 14;
   const shiftPts = shifts
