@@ -274,6 +274,25 @@ body {
   stroke: color-mix(in oklab, var(--color-surface-100) 24%, transparent);
 }
 
+.telemetry-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-dim);
+}
+
+.telemetry-legend .legend-line {
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--color-surface-70);
+}
+
 #telemetry .trace-shift {
   fill: none;
   stroke: var(--color-surface-70);
