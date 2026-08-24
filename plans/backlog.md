@@ -178,6 +178,32 @@ tasks marked with a dependency must follow it. One task = one commit.
   the inspector's Chroma meter for step 80; dropping glimmer to 0, or
   anchorL to 70, drops the arrow and leaves a bare `0.180`.
 
+## 17. ✅ FX panel; token name moves to the copy box
+
+- [x] **Why:** the tuning card is the only titleless panel in the app
+      (`aria-label="Tuning controls"` and nothing on screen), and it mixes
+      the four knobs that recolor the pigment with one control that isn't
+      physics at all — the token family name, which belongs with the CSS
+      output it names. Naming the group **FX** completes the signal chain
+      the app already speaks: True colour is the source, FX is the
+      treatment, Signal monitor is where you watch it land. Grouping is by
+      effect on the scale, not by light source — sun, sky, and subsurface
+      knobs stay together because they all answer "what does light do to
+      this pigment across L".
+- **Change:** wrap the tuning card in a `<section>` + `h2.panel-title`
+  reading `FX`, matching the True colour pattern (`aria-labelledby`, not
+  `aria-label`). Move the token family name field into the CSS tokens
+  panel on its own row between `.output-head` and the `<pre>` — not
+  inline in the header, which is already tight at 390px. Trim
+  `Rayleigh sky scattering` to `Sky scattering`: it is the app's longest
+  label and Rayleigh is the only scattering mechanism in the model.
+  `Solar extinction` stays — it names the mechanism rather than the
+  quantity, and that is the point of it.
+- **Test:** three titled panels read TRUE COLOUR / FX / SIGNAL MONITOR;
+  the FX card holds exactly Solar extinction, Sky scattering, Subsurface
+  extinction, Solar glimmer; the name field sits above the CSS block and
+  still renames every token live; no horizontal scroll at 390px.
+
 ## Explicitly not doing (from Gemini prototype)
 
 - Lagrange polynomial hue interpolation — overshoots, breaks monotonicity.

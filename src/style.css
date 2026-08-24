@@ -738,6 +738,12 @@ input[type="range"]::-moz-range-thumb {
   background: oklch(75% 0.15 150);
 }
 
+/* Token family name rides above the CSS block: its own row, not the
+   .output-head, which is already tight at 390px. */
+.output-name {
+  margin-bottom: 16px;
+}
+
 #css {
   background: var(--bg);
   border-radius: 8px;

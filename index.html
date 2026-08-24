@@ -79,34 +79,37 @@
           </div>
         </section>
 
-        <section class="controls card" aria-label="Tuning controls">
-        <label class="field">
-          <span class="field-label">Token family name</span>
-          <input type="text" id="name" autocomplete="off" spellcheck="false" />
-        </label>
-        <label class="field">
-          <span class="field-label">Solar extinction <output id="solarHue-out"></output></span>
-          <input type="range" id="solarHue" min="75" max="105" step="1" />
-        </label>
-        <label class="field">
-          <span class="field-label">Rayleigh sky scattering <output id="skyFactor-out"></output></span>
-          <input type="range" id="skyFactor" min="0" max="1" step="0.05" />
-        </label>
-        <label class="field field-toggle">
-          <span class="field-label">Subsurface extinction</span>
-          <input type="checkbox" id="subsurface" />
-        </label>
-        <label class="field">
-          <span class="field-label">Solar glimmer <output id="glimmer-out"></output></span>
-          <input type="range" id="glimmer" min="0" max="2" step="0.05" />
-        </label>
-      </section>
+        <section class="fx" aria-labelledby="fx-title">
+          <h2 class="panel-title" id="fx-title">FX</h2>
+          <div class="controls card">
+            <label class="field">
+              <span class="field-label">Solar extinction <output id="solarHue-out"></output></span>
+              <input type="range" id="solarHue" min="75" max="105" step="1" />
+            </label>
+            <label class="field">
+              <span class="field-label">Sky scattering <output id="skyFactor-out"></output></span>
+              <input type="range" id="skyFactor" min="0" max="1" step="0.05" />
+            </label>
+            <label class="field field-toggle">
+              <span class="field-label">Subsurface extinction</span>
+              <input type="checkbox" id="subsurface" />
+            </label>
+            <label class="field">
+              <span class="field-label">Solar glimmer <output id="glimmer-out"></output></span>
+              <input type="range" id="glimmer" min="0" max="2" step="0.05" />
+            </label>
+          </div>
+        </section>
 
-      <section class="output card" aria-label="CSS tokens">
-        <div class="output-head">
-          <h2>CSS tokens</h2>
-          <button type="button" id="copy">Copy CSS</button>
-        </div>
+        <section class="output card" aria-label="CSS tokens">
+          <div class="output-head">
+            <h2>CSS tokens</h2>
+            <button type="button" id="copy">Copy CSS</button>
+          </div>
+          <label class="field output-name">
+            <span class="field-label">Token family name</span>
+            <input type="text" id="name" autocomplete="off" spellcheck="false" />
+          </label>
           <pre id="css"><code></code></pre>
         </section>
       </main>
