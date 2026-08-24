@@ -149,7 +149,11 @@ tasks marked with a dependency must follow it. One task = one commit.
 ## Explicitly not doing (from Gemini prototype)
 
 - Lagrange polynomial hue interpolation — overshoots, breaks monotonicity.
-- Rayleigh-% / subsurface-toggle indirection — the direct shadow-hue
-  slider stays.
-- Solar hue clamped to 75–115° — full range stays.
 - Tailwind CDN, Google Fonts, sub-11px type, global `user-select: none`.
+
+**Reversed by Ville (2026-08-24):** the derived-light model was adopted
+after all — the shadow hue is now computed from the anchor via a
+Rayleigh sky-scattering factor (245° skylight) or subsurface
+Beer-Lambert extinction, and the solar hue is bound to the Planckian
+arc (75–105°). See Gemini's "Biophysical Color Architecture" notes;
+implemented in scale.ts (shadowHueOf).

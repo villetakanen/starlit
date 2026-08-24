@@ -61,12 +61,16 @@
           <input type="range" id="anchorHue" min="0" max="360" step="1" />
         </label>
         <label class="field">
-          <span class="field-label">Solar highlight hue <output id="solarHue-out"></output></span>
-          <input type="range" id="solarHue" min="0" max="360" step="1" />
+          <span class="field-label">Solar extinction <output id="solarHue-out"></output></span>
+          <input type="range" id="solarHue" min="75" max="105" step="1" />
         </label>
         <label class="field">
-          <span class="field-label">Ambient shadow hue <output id="shadowHue-out"></output></span>
-          <input type="range" id="shadowHue" min="0" max="360" step="1" />
+          <span class="field-label">Rayleigh sky scattering <output id="skyFactor-out"></output></span>
+          <input type="range" id="skyFactor" min="0" max="1" step="0.05" />
+        </label>
+        <label class="field field-toggle">
+          <span class="field-label">Subsurface extinction</span>
+          <input type="checkbox" id="subsurface" />
         </label>
         <label class="field">
           <span class="field-label">Peak midtone chroma <output id="peakChroma-out"></output></span>

@@ -426,6 +426,20 @@ body {
   gap: 8px;
 }
 
+.field-toggle {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
 .field-label {
   display: flex;
   justify-content: space-between;

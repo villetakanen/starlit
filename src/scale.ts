@@ -12,15 +12,34 @@ export interface ScaleParams {
   name: string;
   /** Local material anchor hue at L=50 (degrees). */
   anchorHue: number;
-  /** Solar highlight hue at L=90 (degrees). */
+  /**
+   * Solar highlight hue at L=90, bound to the Planckian solar arc
+   * (75°–105°): atmospheric extinction shifts sunlight from
+   * neutral-warm toward amber-gold, never toward blue or magenta.
+   */
   solarHue: number;
-  /** Ambient shadow hue at L=10 (degrees). */
-  shadowHue: number;
+  /**
+   * Rayleigh scattering factor, 0–1: how strongly occluded shadows
+   * drift toward diffuse skylight (or, under subsurface extinction,
+   * toward the pigment's absorption band). The shadow hue is derived,
+   * not set directly — see shadowHueOf().
+   */
+  skyFactor: number;
+  /**
+   * Subsurface (Beer-Lambert) extinction: dense translucent organics
+   * (foliage, berries, tissue) absorb short wavelengths internally, so
+   * deep shadows shift toward the pigment's extinction band instead of
+   * sky blue.
+   */
+  subsurface: boolean;
   /** Peak midtone chroma, 0.01–0.32. */
   peakChroma: number;
   /** Amplifies the chroma flare across L=80–95. */
   glimmer: number;
 }
+
+/** Diffuse skylight hue from Rayleigh scattering (I ∝ λ⁻⁴). */
+export const SKY_HUE = 245;
 
 export interface Swatch {
   step: number;
@@ -41,54 +60,60 @@ export const PRESETS: Preset[] = [
   {
     label: "Deep Nordic Forest",
     name: "forest",
-    shadowHue: 190,
     anchorHue: 145,
     solarHue: 105,
+    skyFactor: 0.45,
+    subsurface: false,
     peakChroma: 0.14,
     glimmer: 1.0,
   },
   {
     label: "Rowan Berry",
     name: "rowan",
-    shadowHue: 355,
     anchorHue: 38,
     solarHue: 92,
+    skyFactor: 1.0,
+    subsurface: true,
     peakChroma: 0.19,
     glimmer: 1.15,
   },
   {
     label: "Hanami Sakura",
     name: "sakura",
-    shadowHue: 345,
     anchorHue: 5,
-    solarHue: 45,
+    solarHue: 75,
+    skyFactor: 1.0,
+    subsurface: true,
     peakChroma: 0.11,
     glimmer: 0.9,
   },
   {
     label: "Citrus Fruit",
     name: "citrus",
-    shadowHue: 320,
     anchorHue: 60,
     solarHue: 95,
+    skyFactor: 0.85,
+    subsurface: true,
     peakChroma: 0.18,
     glimmer: 1.3,
   },
   {
     label: "Urban Asphalt",
     name: "asphalt",
-    shadowHue: 265,
     anchorHue: 240,
     solarHue: 85,
+    skyFactor: 1.0,
+    subsurface: false,
     peakChroma: 0.035,
     glimmer: 0.8,
   },
   {
     label: "Blueberry",
     name: "blueberry",
-    shadowHue: 300,
     anchorHue: 264,
     solarHue: 95,
+    skyFactor: 0.9,
+    subsurface: true,
     peakChroma: 0.16,
     glimmer: 0.85,
   },
@@ -109,6 +134,19 @@ function smoothstep(t: number): number {
 }
 
 /**
+ * Derived shadow hue: the anchor pigment pulled toward the shadow's
+ * illuminant by the Rayleigh factor. The illuminant is diffuse
+ * skylight (245°), or — under subsurface extinction — the pigment's
+ * absorption band (wine red 355° for warm pigments, a denser version
+ * of the pigment itself otherwise).
+ */
+export function shadowHueOf(p: ScaleParams): number {
+  const extinction = p.anchorHue > 30 && p.anchorHue < 120 ? 355 : p.anchorHue - 20;
+  const target = p.subsurface ? extinction : SKY_HUE;
+  return normalizeHue(p.anchorHue + shortestDelta(p.anchorHue, target) * p.skyFactor);
+}
+
+/**
  * Hue along the arc, unwrapped: monotonic degrees without the 0°/360°
  * seam, so the arc can be plotted as one continuous line. Shadow hue
  * holds below L=10, eases to the anchor by L=50, then eases on to the
@@ -116,9 +154,10 @@ function smoothstep(t: number): number {
  * so the full path is one continuous arc.
  */
 export function hueAtUnwrapped(l: number, p: ScaleParams): number {
-  const toAnchor = shortestDelta(p.shadowHue, p.anchorHue);
+  const shadowHue = shadowHueOf(p);
+  const toAnchor = shortestDelta(shadowHue, p.anchorHue);
   const toSolar = shortestDelta(p.anchorHue, p.solarHue);
-  const base = normalizeHue(p.shadowHue);
+  const base = normalizeHue(shadowHue);
   if (l <= 10) return base;
   if (l <= 50) return base + toAnchor * smoothstep((l - 10) / 40);
   if (l <= 90) return base + toAnchor + toSolar * smoothstep((l - 50) / 40);

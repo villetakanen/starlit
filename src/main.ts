@@ -5,7 +5,15 @@ import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "./style.css";
 import { version } from "../package.json";
-import { buildScale, PRESETS, type ScaleParams, STEPS, type Swatch, toCssBlock } from "./scale.ts";
+import {
+  buildScale,
+  PRESETS,
+  type ScaleParams,
+  STEPS,
+  type Swatch,
+  shadowHueOf,
+  toCssBlock,
+} from "./scale.ts";
 import { fractionToStepIndex, renderTelemetry } from "./telemetry.ts";
 
 const state: ScaleParams = { ...PRESETS[0] };
@@ -26,18 +34,21 @@ const inspectorEl = $("#inspector");
 const cssEl = $("#css code");
 const copyBtn = $<HTMLButtonElement>("#copy");
 const nameInput = $<HTMLInputElement>("#name");
+const subsurfaceInput = $<HTMLInputElement>("#subsurface");
 
-type SliderKey = "anchorHue" | "solarHue" | "shadowHue" | "peakChroma" | "glimmer";
-const SLIDERS: SliderKey[] = ["anchorHue", "solarHue", "shadowHue", "peakChroma", "glimmer"];
+type SliderKey = "anchorHue" | "solarHue" | "skyFactor" | "peakChroma" | "glimmer";
+const SLIDERS: SliderKey[] = ["anchorHue", "solarHue", "skyFactor", "peakChroma", "glimmer"];
 
 function formatValue(key: SliderKey, value: number): string {
   if (key === "peakChroma") return value.toFixed(3);
   if (key === "glimmer") return `${value.toFixed(2)}×`;
+  if (key === "skyFactor") return `${Math.round(value * 100)}%`;
   return `${Math.round(value)}°`;
 }
 
 function syncControls(): void {
   nameInput.value = state.name;
+  subsurfaceInput.checked = state.subsurface;
   for (const key of SLIDERS) {
     $<HTMLInputElement>(`#${key}`).value = String(state[key]);
     $(`#${key}-out`).textContent = formatValue(key, state[key]);
@@ -57,7 +68,7 @@ function renderPresets(): void {
       name.textContent = preset.label;
       const info = document.createElement("span");
       info.className = "preset-info";
-      info.textContent = `${preset.shadowHue}°→${preset.anchorHue}°→${preset.solarHue}° · L50`;
+      info.textContent = `${Math.round(shadowHueOf(preset))}°→${preset.anchorHue}°→${preset.solarHue}° · L50`;
       btn.append(name, info);
       btn.addEventListener("click", () => {
         Object.assign(state, preset);
@@ -127,6 +138,12 @@ for (const key of SLIDERS) {
     render();
   });
 }
+
+subsurfaceInput.addEventListener("change", () => {
+  state.subsurface = subsurfaceInput.checked;
+  activePreset = null;
+  render();
+});
 
 nameInput.addEventListener("input", () => {
   state.name = nameInput.value;
