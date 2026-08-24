@@ -154,6 +154,30 @@ tasks marked with a dependency must follow it. One task = one commit.
   drives the strip and the telemetry chroma trace; tuning controls no
   longer mention chroma.
 
+## 16. Anchor flare gap in the Chroma readout
+
+> Depends on #15 (Chroma living in the True colour panel), which is what
+> made the gap conspicuous.
+
+- [ ] **Why:** `Chroma` is the pigment bell's peak, but the painted
+      swatch is `bell + flare`. The glimmer flare is centred on L=88 with
+      a 7-unit width, so at `anchorL` = 80 it still contributes
+      `0.11 · glimmer · exp(-(8/7)²)` ≈ 0.030 per unit of glimmer — up to
+      0.060 at glimmer 2×. The slider then under-reports the swatch it
+      is named after by a third of its own range. At anchorL ≤ 70 the
+      term is ~0.0001 and irrelevant, so this is a one-step problem, not
+      a curve problem. The flare is physically correct — sunlight near
+      L=88 does reach L=80 — so the fix is disclosure, not damping it.
+- **Change:** in the True colour panel, when the anchor swatch's rendered
+  chroma diverges from `peakChroma` by more than one slider step (0.005),
+  append the delivered value to the `Chroma` output — `0.180 → 0.210` —
+  in the same on-panel style as the other readouts. Reuse
+  `anchorStepOf()` to find the swatch and read its `c` from the built
+  scale; no engine change, no new state.
+- **Test:** anchorL 80 + glimmer 2× shows the arrow and a value matching
+  the inspector's Chroma meter for step 80; dropping glimmer to 0, or
+  anchorL to 70, drops the arrow and leaves a bare `0.180`.
+
 ## Explicitly not doing (from Gemini prototype)
 
 - Lagrange polynomial hue interpolation — overshoots, breaks monotonicity.
