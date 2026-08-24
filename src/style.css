@@ -47,10 +47,43 @@ body {
 #app {
   max-width: 480px;
   margin: 0 auto;
-  padding: max(16px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+  padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.app-header {
+  width: 100%;
+  border-bottom: 1px solid var(--surface-2);
+}
+
+.header-inner {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: max(16px, env(safe-area-inset-top)) 16px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.gh-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  padding: 8px 0;
+  flex: 0 0 auto;
+}
+
+.gh-link:active {
+  color: var(--text);
 }
 
 .app-header h1 {
@@ -359,6 +392,10 @@ input[type="range"]::-moz-range-thumb {
   #copy:hover {
     filter: brightness(1.08);
   }
+
+  .gh-link:hover {
+    color: var(--text);
+  }
 }
 
 /* Desktop: two panes — scale on the left, tuning and output on the right.
@@ -371,7 +408,6 @@ input[type="range"]::-moz-range-thumb {
     column-gap: 28px;
     align-items: start;
     grid-template-areas:
-      "header header"
       "presets presets"
       "strip controls"
       "gradient controls"
@@ -379,8 +415,8 @@ input[type="range"]::-moz-range-thumb {
       "inspector output";
   }
 
-  .app-header {
-    grid-area: header;
+  .header-inner {
+    max-width: 1000px;
   }
 
   .presets {
