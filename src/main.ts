@@ -4,6 +4,7 @@ import "@fontsource/barlow/600.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "./style.css";
+import { version } from "../package.json";
 import { buildScale, PRESETS, type ScaleParams, type Swatch, toCssBlock } from "./scale.ts";
 
 const state: ScaleParams = { ...PRESETS[0] };
@@ -137,6 +138,7 @@ copyBtn.addEventListener("click", async () => {
   }, 1200);
 });
 
+$("#version").textContent = `v${version}`;
 renderPresets();
 syncControls();
 render();
