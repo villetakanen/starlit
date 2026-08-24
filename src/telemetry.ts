@@ -1,4 +1,4 @@
-import { type ScaleParams, STEPS, type Swatch } from "./scale.ts";
+import { hueAtUnwrapped, type ScaleParams, STEPS, type Swatch } from "./scale.ts";
 
 /**
  * Waveform telemetry — being rebuilt element by element (divide et
@@ -34,10 +34,23 @@ export function fractionToStepIndex(fraction: number): number {
 
 export function renderTelemetry(
   container: HTMLElement,
-  _p: ScaleParams,
+  p: ScaleParams,
   swatches: Swatch[],
   selectedStep: number,
 ): void {
+  // Sunlight shift: how far the applied light has rotated the hue away
+  // from the true (anchor) colour. Zero at the anchor, drifting toward
+  // the shadow hue one way and the solar hue the other.
+  const anchorHue = hueAtUnwrapped(50, p);
+  const shifts: number[] = [];
+  for (let l = 0; l <= 100; l += 1) shifts.push(hueAtUnwrapped(l, p) - anchorHue);
+  const maxShift = Math.max(10, ...shifts.map(Math.abs)) * 1.15;
+  const midY = SCREEN.top + SCREEN.height / 2;
+  const halfY = SCREEN.height / 2 - 14;
+  const shiftPts = shifts
+    .map((d, l) => `${xOfL(l).toFixed(1)},${(midY - (d / maxShift) * halfY).toFixed(1)}`)
+    .join(" ");
+  const shiftTrace = `<polyline class="trace-shift" points="${shiftPts}"/>`;
   // The L ruler: a gridline every 2 units of lightness, projected onto
   // the equidistant step axis. Dense where a step gap spans many L
   // units (10→20), absent where it spans few (99→100).
@@ -78,6 +91,7 @@ export function renderTelemetry(
   <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Waveform telemetry">
     <rect class="screen" x="0" y="${SCREEN.top}" width="${W}" height="${SCREEN.height}" rx="8"/>
     ${grid}
+    ${shiftTrace}
     ${selected}
     ${axis}
   </svg>`;
