@@ -34,7 +34,12 @@ export interface ScaleParams {
    * sky blue.
    */
   subsurface: boolean;
-  /** Peak midtone chroma, 0.01–0.32. */
+  /**
+   * Chroma of the true pigment, 0.01–0.32. The bell peaks at
+   * `anchorL`, where `chromaBaseAt` returns this value verbatim — so
+   * this is the chroma of the true-colour swatch, not a proxy for it.
+   * Surfaced in the True colour panel as `Chroma`.
+   */
   peakChroma: number;
   /** Amplifies the chroma flare across L=80–95. */
   glimmer: number;

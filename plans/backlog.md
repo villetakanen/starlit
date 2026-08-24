@@ -139,6 +139,21 @@ tasks marked with a dependency must follow it. One task = one commit.
 - **Test:** tune a custom scale, copy URL, open in a private window —
   identical scale, sliders, and CSS output.
 
+## 15. ✅ Chroma joins the True colour panel
+
+- [x] **Why:** `peakChroma` *is* the chroma of the true-colour swatch —
+      the bell peaks at `anchorL`, where `chromaDamp` is 1, so
+      `chromaBaseAt(anchorL)` returns it verbatim. Labelling it "Peak
+      midtone chroma" and filing it among the lighting knobs (solar
+      extinction, Rayleigh, glimmer) framed a material property as a
+      light effect, and split the pigment triple across two panels.
+- **Change:** move the slider into the True colour panel between Hue and
+  Step, relabel to `Chroma`; keep the param name `peakChroma`. No JS
+  change — `SLIDERS` wires by id.
+- **Test:** True colour reads Hue / Chroma / Step; the slider still
+  drives the strip and the telemetry chroma trace; tuning controls no
+  longer mention chroma.
+
 ## Explicitly not doing (from Gemini prototype)
 
 - Lagrange polynomial hue interpolation — overshoots, breaks monotonicity.

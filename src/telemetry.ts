@@ -89,7 +89,7 @@ export function renderTelemetry(
 
   // Chroma trace: colour intensity C(L) — the pigment bell peaking at
   // the anchor plus the solar glimmer flare near L=88. Fixed absolute
-  // scale (0 at the bottom, 0.4 at the top) so the PEAK MIDTONE CHROMA
+  // scale (0 at the bottom, 0.4 at the top) so the TRUE COLOUR CHROMA
   // and SOLAR GLIMMER knobs map 1:1 to the curve.
   const CHROMA_MAX = 0.4;
   const chromaTop = SCREEN.top + 10;

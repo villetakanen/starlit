@@ -69,6 +69,10 @@
               <input type="range" id="anchorHue" min="0" max="360" step="1" />
             </label>
             <label class="field">
+              <span class="field-label">Chroma <output id="peakChroma-out"></output></span>
+              <input type="range" id="peakChroma" min="0.01" max="0.32" step="0.005" />
+            </label>
+            <label class="field">
               <span class="field-label">Step <output id="anchorL-out"></output></span>
               <input type="range" id="anchorL" min="20" max="80" step="10" />
             </label>
@@ -91,10 +95,6 @@
         <label class="field field-toggle">
           <span class="field-label">Subsurface extinction</span>
           <input type="checkbox" id="subsurface" />
-        </label>
-        <label class="field">
-          <span class="field-label">Peak midtone chroma <output id="peakChroma-out"></output></span>
-          <input type="range" id="peakChroma" min="0.01" max="0.32" step="0.005" />
         </label>
         <label class="field">
           <span class="field-label">Solar glimmer <output id="glimmer-out"></output></span>
