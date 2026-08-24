@@ -253,6 +253,12 @@ body {
 /* Waveform telemetry */
 #telemetry {
   cursor: pointer;
+  border-radius: 8px;
+}
+
+#telemetry:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 #telemetry svg {

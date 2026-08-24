@@ -157,6 +157,21 @@ telemetryEl.addEventListener("click", (e) => {
   render();
 });
 
+telemetryEl.addEventListener("keydown", (e) => {
+  const idx = STEPS.indexOf(selectedStep);
+  let next = idx;
+  if (e.key === "ArrowLeft" || e.key === "ArrowDown") next = Math.max(0, idx - 1);
+  else if (e.key === "ArrowRight" || e.key === "ArrowUp")
+    next = Math.min(STEPS.length - 1, idx + 1);
+  else if (e.key === "Home") next = 0;
+  else if (e.key === "End") next = STEPS.length - 1;
+  else return;
+  e.preventDefault();
+  selectedStep = STEPS[next];
+  telemetryEl.setAttribute("aria-valuenow", String(selectedStep));
+  render();
+});
+
 copyBtn.addEventListener("click", async () => {
   await navigator.clipboard.writeText(toCssBlock(buildScale(state)));
   copyBtn.textContent = "Copied ✓";
