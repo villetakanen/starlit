@@ -1,26 +1,25 @@
-import { chromaAt, hueAtUnwrapped, type ScaleParams, type Swatch } from "./scale.ts";
+import { hueAtUnwrapped, type ScaleParams, STEPS, type Swatch } from "./scale.ts";
 
 /**
- * Waveform telemetry: three lanes over a shared lightness axis —
- * the hue arc h(L), the chroma curve C(L), and the color ribbon.
- * See specs/blocks/waveform-telemetry/spec.md.
+ * Waveform telemetry: the applied light as traces over the 13 token
+ * steps, drawn equidistantly — the steps are bespoke tokens, not a
+ * linear lightness axis. See specs/blocks/waveform-telemetry/spec.md.
  */
 
 const W = 320;
-const MX = 8;
-const HUE = { label: 12, top: 20, height: 72 };
-const CHROMA = { label: 112, top: 120, height: 56 };
-const RIBBON = { top: 188, height: 24 };
-const H = 220;
-const CHROMA_MAX = 0.4;
-const SAMPLE_STEP = 2;
+const MX = 14;
+const PLOT = { top: 8, bottom: 156 };
+const TRACE = { top: 36, bottom: 144 };
+const AXIS = { label: 172, chip: 178, chipHeight: 4, chipWidth: 16 };
+const H = 192;
+const GRID_GAP = 16;
 
-const x = (l: number): number => MX + (l / 100) * (W - 2 * MX);
+const x = (i: number): number => MX + (i / (STEPS.length - 1)) * (W - 2 * MX);
 
-/** Map a click fraction of the svg's width back to an L value. */
-export function fractionToL(fraction: number): number {
-  const l = ((fraction * W - MX) / (W - 2 * MX)) * 100;
-  return Math.min(100, Math.max(0, l));
+/** Map a click fraction of the svg's width to the nearest step index. */
+export function fractionToStepIndex(fraction: number): number {
+  const i = Math.round(((fraction * W - MX) / (W - 2 * MX)) * (STEPS.length - 1));
+  return Math.min(STEPS.length - 1, Math.max(0, i));
 }
 
 export function renderTelemetry(
@@ -29,57 +28,53 @@ export function renderTelemetry(
   swatches: Swatch[],
   selectedStep: number,
 ): void {
-  const ls: number[] = [];
-  for (let l = 0; l <= 100; l += SAMPLE_STEP) ls.push(l);
+  const strengthY = (l: number): number => TRACE.bottom - (l / 100) * (TRACE.bottom - TRACE.top);
 
-  const hues = ls.map((l) => hueAtUnwrapped(l, p));
-  const chromas = ls.map((l) => chromaAt(l, p));
+  const hues = STEPS.map((step) => hueAtUnwrapped(step, p));
   const hueMin = Math.min(...hues) - 6;
   const hueMax = Math.max(...hues) + 6;
   const hueY = (h: number): number =>
-    HUE.top + HUE.height - ((h - hueMin) / (hueMax - hueMin)) * HUE.height;
-  const chromaY = (c: number): number =>
-    CHROMA.top + CHROMA.height - (Math.min(c, CHROMA_MAX) / CHROMA_MAX) * CHROMA.height;
+    TRACE.bottom - ((h - hueMin) / (hueMax - hueMin)) * (TRACE.bottom - TRACE.top);
 
-  const huePts = ls.map((l, i) => `${x(l).toFixed(1)},${hueY(hues[i]).toFixed(1)}`).join(" ");
-  const chromaPts = ls.map((l, i) => `${x(l).toFixed(1)},${chromaY(chromas[i]).toFixed(1)}`);
-  const chromaBottom = CHROMA.top + CHROMA.height;
-  const chromaArea = `M ${x(0).toFixed(1)},${chromaBottom} L ${chromaPts.join(" L ")} L ${x(100).toFixed(1)},${chromaBottom} Z`;
+  const strengthPts = STEPS.map((step, i) => `${x(i).toFixed(1)},${strengthY(step).toFixed(1)}`);
+  const huePts = STEPS.map((_, i) => `${x(i).toFixed(1)},${hueY(hues[i]).toFixed(1)}`);
 
-  const ribbonStops = ls
-    .map(
-      (l, i) =>
-        `<stop offset="${l}%" stop-color="oklch(${l}% ${chromas[i].toFixed(4)} ${hues[i].toFixed(1)})"/>`,
-    )
-    .join("");
+  const traceDots = STEPS.map(
+    (step, i) => `
+      <circle class="dot strength-dot" cx="${x(i).toFixed(1)}" cy="${strengthY(step).toFixed(1)}" r="2"/>
+      <circle class="dot hue-dot" cx="${x(i).toFixed(1)}" cy="${hueY(hues[i]).toFixed(1)}" r="2"/>`,
+  ).join("");
 
-  const dots = swatches
-    .map((s) => {
-      const cx = x(s.step).toFixed(1);
+  const axis = swatches
+    .map((s, i) => {
+      const cx = x(i);
       const selected = s.step === selectedStep;
-      const r = selected ? 4.5 : 3;
-      const hy = hueY(hueAtUnwrapped(s.step, p)).toFixed(1);
-      const cy = chromaY(s.c).toFixed(1);
       return `
-        <circle cx="${cx}" cy="${hy}" r="${r}" fill="${s.css}" class="dot${selected ? " selected" : ""}"/>
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="${s.css}" class="dot${selected ? " selected" : ""}"/>`;
+        <text class="axis-label" x="${cx.toFixed(1)}" y="${AXIS.label}" text-anchor="middle">${s.step}</text>
+        <rect class="chip${selected ? " selected" : ""}" x="${(cx - AXIS.chipWidth / 2).toFixed(1)}"
+          y="${AXIS.chip}" width="${AXIS.chipWidth}" height="${AXIS.chipHeight}" rx="1.5" fill="${s.css}"/>`;
     })
     .join("");
 
-  const cx = x(selectedStep).toFixed(1);
+  const selIdx = STEPS.indexOf(selectedStep);
+  const cx = x(selIdx < 0 ? 5 : selIdx).toFixed(1);
 
   container.innerHTML = `
-  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Hue and chroma curves over lightness">
+  <svg viewBox="0 0 ${W} ${H}" role="img"
+    aria-label="Applied light strength and wavelength over the token steps">
     <defs>
-      <linearGradient id="ribbon-grad" x1="0" y1="0" x2="1" y2="0">${ribbonStops}</linearGradient>
+      <pattern id="scope-dots" width="${GRID_GAP}" height="${GRID_GAP}" patternUnits="userSpaceOnUse">
+        <circle cx="${GRID_GAP / 2}" cy="${GRID_GAP / 2}" r="0.75" class="grid-dot"/>
+      </pattern>
     </defs>
-    <text class="lane-label" x="${MX}" y="${HUE.label}">Hue</text>
-    <text class="lane-label" x="${MX}" y="${CHROMA.label}">Chroma</text>
-    <polyline class="hue-trace" points="${huePts}"/>
-    <path class="chroma-area" d="${chromaArea}"/>
-    <polyline class="chroma-trace" points="${chromaPts.join(" ")}"/>
-    <rect x="${MX}" y="${RIBBON.top}" width="${W - 2 * MX}" height="${RIBBON.height}" rx="4" fill="url(#ribbon-grad)"/>
-    <line class="cursor" x1="${cx}" y1="${HUE.top}" x2="${cx}" y2="${RIBBON.top + RIBBON.height}"/>
-    ${dots}
+    <rect class="screen" x="0" y="0" width="${W}" height="${PLOT.bottom + 8}" rx="8"/>
+    <rect x="0" y="0" width="${W}" height="${PLOT.bottom + 8}" rx="8" fill="url(#scope-dots)"/>
+    <text class="lane-label" x="${MX}" y="${PLOT.top + 12}">Strength</text>
+    <text class="lane-label wavelength" x="${MX}" y="${PLOT.top + 24}">Wavelength</text>
+    <line class="cursor" x1="${cx}" y1="${PLOT.top}" x2="${cx}" y2="${AXIS.chip + AXIS.chipHeight}"/>
+    <polyline class="strength-trace" points="${strengthPts.join(" ")}"/>
+    <polyline class="hue-trace" points="${huePts.join(" ")}"/>
+    ${traceDots}
+    ${axis}
   </svg>`;
 }

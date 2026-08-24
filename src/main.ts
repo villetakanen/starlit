@@ -6,7 +6,7 @@ import "@fontsource/ibm-plex-mono/500.css";
 import "./style.css";
 import { version } from "../package.json";
 import { buildScale, PRESETS, type ScaleParams, STEPS, type Swatch, toCssBlock } from "./scale.ts";
-import { fractionToL, renderTelemetry } from "./telemetry.ts";
+import { fractionToStepIndex, renderTelemetry } from "./telemetry.ts";
 
 const state: ScaleParams = { ...PRESETS[0] };
 let selectedStep = 50;
@@ -136,8 +136,7 @@ nameInput.addEventListener("input", () => {
 
 telemetryEl.addEventListener("click", (e) => {
   const rect = telemetryEl.getBoundingClientRect();
-  const l = fractionToL((e.clientX - rect.left) / rect.width);
-  selectedStep = STEPS.reduce((a, b) => (Math.abs(b - l) < Math.abs(a - l) ? b : a));
+  selectedStep = STEPS[fractionToStepIndex((e.clientX - rect.left) / rect.width)];
   render();
 });
 

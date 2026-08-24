@@ -261,6 +261,14 @@ body {
   height: auto;
 }
 
+#telemetry .screen {
+  fill: var(--color-surface-0);
+}
+
+#telemetry .grid-dot {
+  fill: color-mix(in oklab, var(--color-surface-100) 10%, transparent);
+}
+
 #telemetry .lane-label {
   font-family: var(--font-ui);
   font-size: 8px;
@@ -270,6 +278,17 @@ body {
   fill: var(--text-dim);
 }
 
+#telemetry .lane-label.wavelength {
+  fill: var(--accent);
+}
+
+#telemetry .strength-trace {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+
 #telemetry .hue-trace {
   fill: none;
   stroke: var(--accent);
@@ -277,14 +296,12 @@ body {
   stroke-linecap: round;
 }
 
-#telemetry .chroma-area {
-  fill: color-mix(in oklab, var(--accent) 16%, transparent);
+#telemetry .strength-dot {
+  fill: var(--text);
 }
 
-#telemetry .chroma-trace {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1;
+#telemetry .hue-dot {
+  fill: var(--accent);
 }
 
 #telemetry .cursor {
@@ -293,14 +310,15 @@ body {
   opacity: 0.5;
 }
 
-#telemetry .dot {
-  stroke: var(--bg);
-  stroke-width: 0.75;
+#telemetry .axis-label {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  fill: var(--text-dim);
 }
 
-#telemetry .dot.selected {
+#telemetry .chip.selected {
   stroke: var(--text);
-  stroke-width: 1.25;
+  stroke-width: 0.75;
 }
 
 /* Inspector */
