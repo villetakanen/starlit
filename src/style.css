@@ -453,9 +453,10 @@ body {
 }
 
 .osd-token {
+  align-self: flex-end;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--accent);
+  color: var(--text);
   background: color-mix(in oklab, var(--color-surface-0) 80%, transparent);
   border-radius: 4px;
   padding: 4px 8px;
@@ -534,7 +535,7 @@ body {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0;
   text-transform: none;
-  color: var(--accent);
+  color: var(--text);
 }
 
 .meter-track {
