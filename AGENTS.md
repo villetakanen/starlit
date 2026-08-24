@@ -34,6 +34,19 @@ dependencies (fonts self-hosted via Fontsource).
   IBM Plex Mono for every value readout and token name.
 - Mobile-first, not mobile-only: the base layout is the 390px column;
   wider viewports only add, never change, the base.
-- Work items live in `plans/backlog.md` — atomic tasks, one task = one
-  commit, tick the checkbox in the same commit that lands the task.
+- Work items live in GitHub issues (`gh issue list`) — atomic tasks, one
+  task = one commit, close the issue from the commit that lands it.
 - Run `npx biome check --write .` and `npm run build` before committing.
+
+## Rejected approaches
+
+Settled calls — don't reintroduce these:
+
+- Lagrange polynomial hue interpolation — overshoots, breaks monotonicity.
+  The arc is piecewise smoothstep, monotonic by construction.
+- Tailwind CDN, Google Fonts, sub-11px type, global `user-select: none`.
+
+The derived-light model, once rejected, was **adopted** (2026-08-24): the
+shadow hue is computed from the anchor via a Rayleigh sky-scattering
+factor (245° skylight) or subsurface Beer-Lambert extinction, and the
+solar hue is bound to the Planckian arc (75–105°). See `shadowHueOf()`.

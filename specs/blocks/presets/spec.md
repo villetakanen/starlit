@@ -16,8 +16,8 @@ Each card contains:
 - an info line in mono: the hue arc `shadow°→anchor°→solar°` and the
   anchor step, e.g. `190°→145°→105° · L50`
 
-The anchor step reads `L50` for all presets until the movable pigment
-anchor lands (backlog task 7); after that each preset carries its own.
+The anchor step is per-preset: each carries its own `anchorL`, rendered
+from the preset rather than assumed.
 
 Presets (label / token family / shadow→anchor→solar / peak C / glimmer):
 
