@@ -136,12 +136,15 @@ export function renderTelemetry(
     chromaBottom -
     (chromaAt(selectedStep, p) / CHROMA_MAX) * (chromaBottom - chromaTop)
   ).toFixed(1);
+  const selLumY = (chromaBottom - (selectedStep / 100) * (chromaBottom - chromaTop)).toFixed(1);
   const selected = `
     <line class="grid-l major" x1="${sx}" y1="${gridY1}" x2="${sx}" y2="${gridY2}"/>
     <circle class="led-halo" cx="${sx}" cy="${gridY2}" r="4.5"/>
     <circle class="led" cx="${sx}" cy="${gridY2}" r="2.25"/>
     <circle class="led-halo" cx="${sx}" cy="${selChromaY}" r="4.5"/>
-    <circle class="led" cx="${sx}" cy="${selChromaY}" r="2.25"/>`;
+    <circle class="led" cx="${sx}" cy="${selChromaY}" r="2.25"/>
+    <circle class="led-halo" cx="${sx}" cy="${selLumY}" r="4.5"/>
+    <circle class="led" cx="${sx}" cy="${selLumY}" r="2.25"/>`;
 
   const axis = swatches
     .map((s, i) => {
