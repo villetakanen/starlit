@@ -306,7 +306,7 @@ body {
   stroke-linejoin: round;
 }
 
-#telemetry .trace-hue {
+#telemetry .trace-chroma {
   fill: none;
   stroke: var(--accent);
   stroke-width: 1.5;
