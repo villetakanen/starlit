@@ -109,21 +109,25 @@ function smoothstep(t: number): number {
 }
 
 /**
- * Hue along the arc. Shadow hue holds below L=10, eases to the anchor by
- * L=50, then eases on to the solar hue by L=90 and holds. Each segment uses
- * shortest-path interpolation, so the full path is one continuous arc.
+ * Hue along the arc, unwrapped: monotonic degrees without the 0°/360°
+ * seam, so the arc can be plotted as one continuous line. Shadow hue
+ * holds below L=10, eases to the anchor by L=50, then eases on to the
+ * solar hue by L=90 and holds. Each segment uses shortest-path deltas,
+ * so the full path is one continuous arc.
  */
+export function hueAtUnwrapped(l: number, p: ScaleParams): number {
+  const toAnchor = shortestDelta(p.shadowHue, p.anchorHue);
+  const toSolar = shortestDelta(p.anchorHue, p.solarHue);
+  const base = normalizeHue(p.shadowHue);
+  if (l <= 10) return base;
+  if (l <= 50) return base + toAnchor * smoothstep((l - 10) / 40);
+  if (l <= 90) return base + toAnchor + toSolar * smoothstep((l - 50) / 40);
+  return base + toAnchor + toSolar;
+}
+
+/** Hue along the arc, normalized to [0, 360). */
 export function hueAt(l: number, p: ScaleParams): number {
-  if (l <= 10) return normalizeHue(p.shadowHue);
-  if (l <= 50) {
-    const t = smoothstep((l - 10) / 40);
-    return normalizeHue(p.shadowHue + shortestDelta(p.shadowHue, p.anchorHue) * t);
-  }
-  if (l <= 90) {
-    const t = smoothstep((l - 50) / 40);
-    return normalizeHue(p.anchorHue + shortestDelta(p.anchorHue, p.solarHue) * t);
-  }
-  return normalizeHue(p.solarHue);
+  return normalizeHue(hueAtUnwrapped(l, p));
 }
 
 /**

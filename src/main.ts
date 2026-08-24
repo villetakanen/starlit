@@ -5,7 +5,8 @@ import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "./style.css";
 import { version } from "../package.json";
-import { buildScale, PRESETS, type ScaleParams, type Swatch, toCssBlock } from "./scale.ts";
+import { buildScale, PRESETS, type ScaleParams, STEPS, type Swatch, toCssBlock } from "./scale.ts";
+import { fractionToL, renderTelemetry } from "./telemetry.ts";
 
 const state: ScaleParams = { ...PRESETS[0] };
 let selectedStep = 50;
@@ -20,7 +21,7 @@ const $ = <T extends HTMLElement>(sel: string): T => {
 
 const presetsEl = $("#presets");
 const stripEl = $("#strip");
-const gradientEl = $("#gradient");
+const telemetryEl = $("#telemetry");
 const inspectorEl = $("#inspector");
 const cssEl = $("#css code");
 const copyBtn = $<HTMLButtonElement>("#copy");
@@ -113,8 +114,7 @@ function render(): void {
   const selected =
     swatches.find((s) => s.step === selectedStep) ?? swatches[Math.floor(swatches.length / 2)];
   renderInspector(selected);
-  const stops = swatches.map((s) => `${s.css} ${s.step}%`).join(", ");
-  gradientEl.style.background = `linear-gradient(to right, ${stops})`;
+  renderTelemetry(telemetryEl, state, swatches, selectedStep);
   cssEl.textContent = toCssBlock(swatches);
   syncPresetChips();
 }
@@ -131,6 +131,13 @@ for (const key of SLIDERS) {
 nameInput.addEventListener("input", () => {
   state.name = nameInput.value;
   activePreset = null;
+  render();
+});
+
+telemetryEl.addEventListener("click", (e) => {
+  const rect = telemetryEl.getBoundingClientRect();
+  const l = fractionToL((e.clientX - rect.left) / rect.width);
+  selectedStep = STEPS.reduce((a, b) => (Math.abs(b - l) < Math.abs(a - l) ? b : a));
   render();
 });
 

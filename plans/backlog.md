@@ -52,9 +52,16 @@ tasks marked with a dependency must follow it. One task = one commit.
 - **Test:** bar renders with no visible band edges or grey gap in the
   midtones for all four presets.
 
-## 6. Hue-arc plot (depends on 1)
+## 6. ✅ Hue-arc plot (depends on 1)
 
-- [ ] **Why:** makes the monotonic arc — the thing the tool sells —
+> Superseded and delivered by the waveform telemetry block
+> (specs/blocks/waveform-telemetry/spec.md): three lanes — unwrapped
+> hue trace, chroma curve, color ribbon — with step dots, a selection
+> cursor, and click-to-select. The gradient strip from task 5 was
+> absorbed into the ribbon lane. Note: landed without the task-1 test
+> safety net; engine tests remain open.
+
+- [x] **Why:** makes the monotonic arc — the thing the tool sells —
       visible and debuggable.
 - **Change:** inline SVG polyline of h (y) over L (x) sampled every 2 L
   units, plus dots at the 13 token steps colored by their own swatch.

@@ -250,10 +250,57 @@ body {
   font-size: 0.75rem;
 }
 
-/* Gradient continuity strip */
-.gradient {
-  height: 24px;
-  border-radius: 8px;
+/* Waveform telemetry */
+#telemetry {
+  cursor: pointer;
+}
+
+#telemetry svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#telemetry .lane-label {
+  font-family: var(--font-ui);
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  fill: var(--text-dim);
+}
+
+#telemetry .hue-trace {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+#telemetry .chroma-area {
+  fill: color-mix(in oklab, var(--accent) 16%, transparent);
+}
+
+#telemetry .chroma-trace {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+#telemetry .cursor {
+  stroke: var(--text);
+  stroke-width: 0.75;
+  opacity: 0.5;
+}
+
+#telemetry .dot {
+  stroke: var(--bg);
+  stroke-width: 0.75;
+}
+
+#telemetry .dot.selected {
+  stroke: var(--text);
+  stroke-width: 1.25;
 }
 
 /* Inspector */
