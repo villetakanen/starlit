@@ -1,0 +1,20 @@
+{
+  "name": "starlit",
+  "description": "Mobile-first studio for hue-shifting OKLCH color token scales",
+  "license": "MIT",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "biome check .",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.10",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2"
+  }
+}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#101014" />
+    <title>Starlit — OKLCH scale studio</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <h1>Starlit</h1>
+        <p>Hue-shifting OKLCH token scales, lit like the real world.</p>
+      </header>
+
+      <nav class="presets" id="presets" aria-label="Presets"></nav>
+
+      <section class="strip" id="strip" aria-label="Swatch strip"></section>
+
+      <section class="inspector card" id="inspector" aria-live="polite"></section>
+
+      <section class="controls card" aria-label="Tuning controls">
+        <label class="field">
+          <span class="field-label">Token family name</span>
+          <input type="text" id="name" autocomplete="off" spellcheck="false" />
+        </label>
+        <label class="field">
+          <span class="field-label">Local anchor hue <output id="anchorHue-out"></output></span>
+          <input type="range" id="anchorHue" min="0" max="360" step="1" />
+        </label>
+        <label class="field">
+          <span class="field-label">Solar highlight hue <output id="solarHue-out"></output></span>
+          <input type="range" id="solarHue" min="0" max="360" step="1" />
+        </label>
+        <label class="field">
+          <span class="field-label">Ambient shadow hue <output id="shadowHue-out"></output></span>
+          <input type="range" id="shadowHue" min="0" max="360" step="1" />
+        </label>
+        <label class="field">
+          <span class="field-label">Peak midtone chroma <output id="peakChroma-out"></output></span>
+          <input type="range" id="peakChroma" min="0.01" max="0.32" step="0.005" />
+        </label>
+        <label class="field">
+          <span class="field-label">Solar glimmer <output id="glimmer-out"></output></span>
+          <input type="range" id="glimmer" min="0" max="2" step="0.05" />
+        </label>
+      </section>
+
+      <section class="output card" aria-label="CSS tokens">
+        <div class="output-head">
+          <h2>CSS tokens</h2>
+          <button type="button" id="copy">Copy CSS</button>
+        </div>
+        <pre id="css"><code></code></pre>
+      </section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
