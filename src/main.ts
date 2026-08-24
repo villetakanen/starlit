@@ -3,6 +3,8 @@ import { buildScale, PRESETS, type ScaleParams, type Swatch, toCssBlock } from "
 
 const state: ScaleParams = { ...PRESETS[0] };
 let selectedStep = 50;
+let activePreset: string | null = PRESETS[0].label;
+const presetButtons = new Map<string, HTMLButtonElement>();
 
 const $ = <T extends HTMLElement>(sel: string): T => {
   const el = document.querySelector<T>(sel);
@@ -45,12 +47,20 @@ function renderPresets(): void {
       if (mid) btn.style.setProperty("--dot", mid.css);
       btn.addEventListener("click", () => {
         Object.assign(state, preset);
+        activePreset = preset.label;
         syncControls();
         render();
       });
+      presetButtons.set(preset.label, btn);
       return btn;
     }),
   );
+}
+
+function syncPresetChips(): void {
+  for (const [label, btn] of presetButtons) {
+    btn.setAttribute("aria-pressed", String(label === activePreset));
+  }
 }
 
 function renderInspector(swatch: Swatch): void {
@@ -87,11 +97,13 @@ function render(): void {
     swatches.find((s) => s.step === selectedStep) ?? swatches[Math.floor(swatches.length / 2)];
   renderInspector(selected);
   cssEl.textContent = toCssBlock(swatches);
+  syncPresetChips();
 }
 
 for (const key of SLIDERS) {
   $<HTMLInputElement>(`#${key}`).addEventListener("input", (e) => {
     state[key] = Number((e.target as HTMLInputElement).value);
+    activePreset = null;
     $(`#${key}-out`).textContent = formatValue(key, state[key]);
     render();
   });
@@ -99,6 +111,7 @@ for (const key of SLIDERS) {
 
 nameInput.addEventListener("input", () => {
   state.name = nameInput.value;
+  activePreset = null;
   render();
 });
 
