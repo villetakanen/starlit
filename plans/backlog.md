@@ -79,9 +79,9 @@ tasks marked with a dependency must follow it. One task = one commit.
 - **Test:** selecting 70 visibly moves peak saturation up the strip; the
   inspector at step 70 shows the anchor hue exactly.
 
-## 9. Anchor badge in strip (depends on 7)
+## 9. ✅ Anchor badge in strip (depends on 7)
 
-- [ ] **Why:** shows where the true pigment lives in the scale.
+- [x] **Why:** shows where the true pigment lives in the scale.
 - **Change:** mark the swatch at `anchorL` with a small ● / "anchor"
   affix and an `aria-label` addition.
 - **Test:** badge sits on step 50 by default and follows the anchor

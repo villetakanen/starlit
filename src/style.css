@@ -220,6 +220,7 @@ body {
 }
 
 .swatch {
+  position: relative;
   width: 48px;
   height: 24px;
   border: none;
@@ -246,6 +247,16 @@ body {
 
 .swatch .on-light {
   color: color-mix(in oklab, var(--color-surface-0) 88%, transparent);
+}
+
+/* Pigment anchor: an LED on the swatch holding the true material colour. */
+.anchor-dot {
+  position: absolute;
+  left: 5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
 /* Waveform telemetry */

@@ -135,17 +135,36 @@ function renderInspector(swatch: Swatch, darkest: Swatch, lightest: Swatch): voi
     </div>`;
 }
 
+// The step whose swatch carries the true pigment. anchorL is a 10-unit slider
+// so it always lands on a step, but resolving the nearest one keeps exactly
+// one badge visible if that range ever loosens.
+function anchorStepOf(anchorL: number): number {
+  return STEPS.reduce((best, step) =>
+    Math.abs(step - anchorL) < Math.abs(best - anchorL) ? step : best,
+  );
+}
+
 function render(): void {
   const swatches = buildScale(state);
+  const anchorStep = anchorStepOf(state.anchorL);
   stripEl.replaceChildren(
     ...swatches.map((swatch) => {
+      const isAnchor = swatch.step === anchorStep;
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "swatch";
       btn.style.background = swatch.css;
-      btn.setAttribute("aria-label", `${swatch.token}: ${swatch.css}`);
+      btn.setAttribute(
+        "aria-label",
+        `${swatch.token}: ${swatch.css}${isAnchor ? " — pigment anchor" : ""}`,
+      );
       btn.setAttribute("aria-pressed", String(swatch.step === selectedStep));
       const contrast = swatch.l > 55 ? "on-light" : "on-dark";
+      if (isAnchor) {
+        const dot = document.createElement("span");
+        dot.className = `anchor-dot ${contrast}`;
+        btn.append(dot);
+      }
       const step = document.createElement("span");
       step.textContent = String(swatch.step);
       step.className = contrast;
