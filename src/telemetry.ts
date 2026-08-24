@@ -10,8 +10,8 @@ import { type ScaleParams, STEPS, type Swatch } from "./scale.ts";
 const W = 320;
 const MX = 14;
 const SCREEN = { top: 0, height: 152 };
-const AXIS = { label: 168, chipTop: 173, chipWidth: 22, chipHeight: 13 };
-const H = 194;
+const AXIS = { chipTop: 158, chipWidth: 22, chipHeight: 8, label: 178 };
+const H = 184;
 
 const xOfIndex = (i: number): number => MX + (i / (STEPS.length - 1)) * (W - 2 * MX);
 
@@ -65,12 +65,12 @@ export function renderTelemetry(
       const cx = xOfIndex(i);
       const isSelected = s.step === selectedStep;
       const chipText = s.l > 55 ? "on-light" : "on-dark";
-      const chipTextY = AXIS.chipTop + AXIS.chipHeight / 2 + 2.5;
+      const chipTextY = AXIS.chipTop + AXIS.chipHeight / 2 + 2.2;
       return `
-        <text class="axis-label${isSelected ? " selected" : ""}" x="${cx.toFixed(1)}" y="${AXIS.label}" text-anchor="middle">${s.step}</text>
         <rect class="chip" x="${(cx - AXIS.chipWidth / 2).toFixed(1)}" y="${AXIS.chipTop}"
           width="${AXIS.chipWidth}" height="${AXIS.chipHeight}" rx="2" fill="${s.css}"/>
-        <text class="chip-hue ${chipText}" x="${cx.toFixed(1)}" y="${chipTextY}" text-anchor="middle">${Math.round(s.h)}°</text>`;
+        <text class="chip-hue ${chipText}" x="${cx.toFixed(1)}" y="${chipTextY}" text-anchor="middle">${Math.round(s.h)}°</text>
+        <text class="axis-label${isSelected ? " selected" : ""}" x="${cx.toFixed(1)}" y="${AXIS.label}" text-anchor="middle">${s.step}</text>`;
     })
     .join("");
 
