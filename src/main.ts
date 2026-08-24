@@ -89,15 +89,23 @@ function syncPresetChips(): void {
 }
 
 function renderInspector(swatch: Swatch): void {
+  const meter = (label: string, value: string, fraction: number): string => `
+    <div class="meter">
+      <div class="meter-head"><span>${label}</span><span class="meter-value">${value}</span></div>
+      <div class="meter-track">
+        <div class="meter-fill" style="width:${Math.min(100, fraction * 100).toFixed(1)}%"></div>
+      </div>
+    </div>`;
   inspectorEl.innerHTML = `
-    <div class="monitor" style="background:${swatch.css}"></div>
+    <div class="monitor-bezel"><div class="monitor" style="background:${swatch.css}"></div></div>
     <code class="token">${swatch.token}</code>
-    <dl class="readout-grid">
-      <dt>Lightness</dt><dd>${swatch.l}%</dd>
-      <dt>Chroma</dt><dd>${swatch.c}</dd>
-      <dt>Hue</dt><dd>${swatch.h}°</dd>
-    </dl>
-    <code class="value">oklch(${swatch.l}% ${swatch.c} ${swatch.h})</code>`;
+    ${meter("Lightness", `${swatch.l}%`, swatch.l / 100)}
+    ${meter("Chroma", String(swatch.c), swatch.c / 0.4)}
+    ${meter("Hue", `${swatch.h}°`, swatch.h / 360)}
+    <div class="value-row">
+      <code class="value">${swatch.css}</code>
+      <button type="button" class="copy-colour" data-colour="${swatch.css}">Copy</button>
+    </div>`;
 }
 
 function render(): void {
@@ -185,6 +193,16 @@ telemetryEl.addEventListener("keydown", (e) => {
   selectedStep = STEPS[next];
   telemetryEl.setAttribute("aria-valuenow", String(selectedStep));
   render();
+});
+
+inspectorEl.addEventListener("click", async (e) => {
+  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".copy-colour");
+  if (!btn) return;
+  await navigator.clipboard.writeText(btn.dataset.colour ?? "");
+  btn.textContent = "✓";
+  setTimeout(() => {
+    btn.textContent = "Copy";
+  }, 1200);
 });
 
 copyBtn.addEventListener("click", async () => {
