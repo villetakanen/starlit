@@ -90,11 +90,14 @@ function syncPresetChips(): void {
 
 function renderInspector(swatch: Swatch): void {
   inspectorEl.innerHTML = `
-    <div class="chip" style="background:${swatch.css}"></div>
-    <div class="inspector-meta">
-      <code class="token">${swatch.token}</code>
-      <code class="value">oklch(${swatch.l}% ${swatch.c} ${swatch.h})</code>
-    </div>`;
+    <div class="monitor" style="background:${swatch.css}"></div>
+    <code class="token">${swatch.token}</code>
+    <dl class="readout-grid">
+      <dt>Lightness</dt><dd>${swatch.l}%</dd>
+      <dt>Chroma</dt><dd>${swatch.c}</dd>
+      <dt>Hue</dt><dd>${swatch.h}°</dd>
+    </dl>
+    <code class="value">oklch(${swatch.l}% ${swatch.c} ${swatch.h})</code>`;
 }
 
 function render(): void {
@@ -108,13 +111,13 @@ function render(): void {
       btn.setAttribute("aria-label", `${swatch.token}: ${swatch.css}`);
       btn.setAttribute("aria-pressed", String(swatch.step === selectedStep));
       const contrast = swatch.l > 55 ? "on-light" : "on-dark";
+      const hue = document.createElement("span");
+      hue.textContent = `${Math.round(swatch.h)}°`;
+      hue.className = `hue ${contrast}`;
       const step = document.createElement("span");
       step.textContent = String(swatch.step);
-      step.className = contrast;
-      const hue = document.createElement("span");
-      hue.textContent = `${swatch.h}°`;
-      hue.className = `hue ${contrast}`;
-      btn.append(step, hue);
+      step.className = `step ${contrast}`;
+      btn.append(hue, step);
       btn.addEventListener("click", () => {
         selectedStep = swatch.step;
         render();
@@ -155,6 +158,21 @@ telemetryEl.addEventListener("click", (e) => {
   const rect = telemetryEl.getBoundingClientRect();
   selectedStep = STEPS[fractionToStepIndex((e.clientX - rect.left) / rect.width)];
   render();
+});
+
+stripEl.addEventListener("keydown", (e) => {
+  const idx = STEPS.indexOf(selectedStep);
+  let next = idx;
+  if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = Math.max(0, idx - 1);
+  else if (e.key === "ArrowDown" || e.key === "ArrowRight")
+    next = Math.min(STEPS.length - 1, idx + 1);
+  else if (e.key === "Home") next = 0;
+  else if (e.key === "End") next = STEPS.length - 1;
+  else return;
+  e.preventDefault();
+  selectedStep = STEPS[next];
+  render();
+  (stripEl.children[next] as HTMLElement | undefined)?.focus();
 });
 
 telemetryEl.addEventListener("keydown", (e) => {

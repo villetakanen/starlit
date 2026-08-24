@@ -53,11 +53,13 @@
           </div>
         </section>
 
-        <section class="scale-panel" aria-label="Scale">
-          <fieldset class="strip" id="strip" aria-label="Swatch strip"></fieldset>
+        <section class="channel-strip card" aria-labelledby="channel-title">
+          <h2 class="panel-title" id="channel-title">Channel strip</h2>
+          <div class="channel-blocks">
+            <fieldset class="step-selector" id="strip" aria-label="Step selector"></fieldset>
+            <div class="readout" id="inspector" aria-live="polite"></div>
+          </div>
         </section>
-
-        <section class="inspector card" id="inspector" aria-live="polite"></section>
 
         <section class="controls card" aria-label="Tuning controls">
         <label class="field">
