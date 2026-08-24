@@ -82,10 +82,14 @@ function render(): void {
       btn.style.background = swatch.css;
       btn.setAttribute("aria-label", `${swatch.token}: ${swatch.css}`);
       btn.setAttribute("aria-pressed", String(swatch.step === selectedStep));
-      const label = document.createElement("span");
-      label.textContent = String(swatch.step);
-      label.className = swatch.l > 55 ? "on-light" : "on-dark";
-      btn.append(label);
+      const contrast = swatch.l > 55 ? "on-light" : "on-dark";
+      const step = document.createElement("span");
+      step.textContent = String(swatch.step);
+      step.className = contrast;
+      const hue = document.createElement("span");
+      hue.textContent = `${swatch.h}°`;
+      hue.className = `hue ${contrast}`;
+      btn.append(step, hue);
       btn.addEventListener("click", () => {
         selectedStep = swatch.step;
         render();
