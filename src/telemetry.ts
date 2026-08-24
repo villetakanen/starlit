@@ -9,9 +9,9 @@ import { type ScaleParams, STEPS, type Swatch } from "./scale.ts";
 
 const W = 320;
 const MX = 14;
-const SCREEN = { top: 0, height: 152 };
-const AXIS = { chipTop: 158, chipWidth: 22, chipHeight: 8, label: 178 };
-const H = 184;
+const AXIS = { chipTop: 0, chipWidth: 22, chipHeight: 8, label: 180 };
+const SCREEN = { top: 14, height: 152 };
+const H = 186;
 
 const xOfIndex = (i: number): number => MX + (i / (STEPS.length - 1)) * (W - 2 * MX);
 
