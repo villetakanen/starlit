@@ -18,17 +18,25 @@ spacing even though luminance is compacted at the ends of the scale
 (…90, 95, 99, 100). The dot grid plus the strength trace make that
 condensation visible instead of hiding it.
 
-Two traces over the steps:
+Three traces over the steps, sampled densely (every L) and mapped
+piecewise between the equidistant step positions so curves stay
+smooth:
 
-1. **STRENGTH** — the applied light's intensity: L per step, 0–100.
-   Because the x axis is equidistant steps, this line curves — flat
-   segments show where the scale condenses.
-2. **WAVELENGTH** — the applied light's colour: hue per step,
-   unwrapped so wrap-around arcs (355°→38°) draw as one continuous
-   line with no vertical jump.
+1. **STRENGTH** — the applied light's intensity: L, 0–100. Because
+   the x axis is equidistant steps, this line curves — flattening
+   shows where the scale condenses.
+2. **WAVELENGTH** — the applied light's colour: hue, unwrapped so
+   wrap-around arcs (355°→38°) draw as one continuous line with no
+   vertical jump. Solid accent stroke.
+3. **CHROMA** — C(L), the pigment bell plus solar glimmer flare.
+   Dashed accent stroke with a faint area fill; fixed 0–0.4 range so
+   presets are comparable.
 
 A small legend identifies the traces (silkscreen labels; strength in
-the neutral trace colour, wavelength in accent).
+the neutral trace colour, wavelength/chroma in accent).
+
+**Ribbon:** below the screen, a continuous strip of the actual color
+at every L, on the same equidistant-step mapping.
 
 **Bottom axis:** each step's name (0, 10, … 99, 100) in tiny mono,
 and under each name an elongated square (colour chip) of that step's

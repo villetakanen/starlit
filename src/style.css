@@ -282,6 +282,21 @@ body {
   fill: var(--accent);
 }
 
+#telemetry .lane-label.chroma {
+  fill: color-mix(in oklab, var(--accent) 55%, var(--text-dim));
+}
+
+#telemetry .chroma-area {
+  fill: color-mix(in oklab, var(--accent) 12%, transparent);
+}
+
+#telemetry .chroma-trace {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+}
+
 #telemetry .strength-trace {
   fill: none;
   stroke: var(--text-dim);
