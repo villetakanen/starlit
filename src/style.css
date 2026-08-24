@@ -429,36 +429,85 @@ body {
 }
 
 /* Readout: the chosen colour's specs */
+/* The readout is a DISPLAY: recessed bezel, the screen filled with
+   the selected colour itself, data overlaid as an OSD. */
 .readout {
   flex: 1;
   min-width: 0;
-  background: var(--surface-2);
+  background: var(--color-surface-0);
   border-radius: 8px;
-  padding: 16px;
+  padding: 4px;
+  display: flex;
+}
+
+.osd-screen {
+  flex: 1;
+  min-width: 0;
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.osd-token {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  background: color-mix(in oklab, var(--color-surface-0) 80%, transparent);
+  border-radius: 4px;
+  padding: 4px 8px;
+  overflow-wrap: anywhere;
+}
+
+.osd-strip {
+  align-self: stretch;
+  background: color-mix(in oklab, var(--color-surface-0) 84%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 4px;
+  padding: 8px 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.readout .monitor-bezel {
-  background: var(--color-surface-0);
-  border-radius: 8px;
-  padding: 4px;
+.osd-values {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
 }
 
-.readout .monitor {
-  height: 112px;
-  border-radius: 4px;
+.osd-values .meter.wide {
+  grid-column: 1 / -1;
 }
 
-.readout code {
+.osd-strip .meter-track {
+  background: color-mix(in oklab, var(--color-surface-100) 12%, transparent);
+}
+
+.osd-strip .value {
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  background: color-mix(in oklab, var(--color-surface-100) 8%, transparent);
+  color: var(--text-dim);
   overflow-wrap: anywhere;
 }
 
-.readout .token {
-  color: var(--accent);
+.clip-led {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-left: 6px;
+  background: color-mix(in oklab, var(--color-surface-100) 15%, transparent);
+}
+
+.clip-led.on {
+  background: oklch(60% 0.21 27);
+  box-shadow: 0 0 6px oklch(60% 0.21 27 / 0.8);
 }
 
 .meter {
@@ -502,7 +551,6 @@ body {
 }
 
 .value-row {
-  margin-top: auto;
   display: flex;
   gap: 8px;
   align-items: stretch;
@@ -511,10 +559,8 @@ body {
 .value-row .value {
   flex: 1;
   min-width: 0;
-  background: var(--color-surface-0);
   border-radius: 4px;
   padding: 8px 12px;
-  color: var(--text-dim);
 }
 
 .copy-colour {

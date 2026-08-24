@@ -30,16 +30,29 @@ chips and in the readout.
 The selected square is ringed in the accent LED colour, and selection
 stays in sync with the telemetry playhead, both directions.
 
-### 2. Readout (chosen colour specs)
+### 2. Readout — the OSD monitor (a display, not a control)
 
-Next to the selector, the second raised block displays the selected
-step's full specs, stretched to the selector's height:
+Next to the selector, the readout is a **recessed display** per the
+depth grammar (specs/design-language.md): a `surface-0` bezel whose
+screen is filled edge-to-edge with the selected colour itself — you
+are looking at the signal on a broadcast monitor. The data overlays
+it like a camera OSD on translucent dark strips:
 
-- a larger square of the colour itself (the monitor)
-- the token name (`--chroma-<family>-<step>`) in accent mono
-- the OKLCH components broken out as labelled readouts, silkscreen
-  label + mono value: Lightness, Chroma, Hue
-- the CSS value line (`oklch(L% C H)`) anchored at the block's bottom
+- top corner: the token name (`--chroma-<family>-<step>`) in accent
+  mono on a translucent chip
+- bottom OSD strip, carrying seven data points — *what is it, how is
+  it built, will it survive the screen, what can sit on it, how do I
+  take it*:
+  - **Lightness** and **Chroma** with LED bar meters against their
+    full ranges (0–100%, 0–0.4)
+  - **Hue** as a number only (circular quantity — a bar position
+    would lie)
+  - **sRGB**: the gamut-mapped hex fallback, with a **clip LED** that
+    lights red when the raw OKLCH exceeds the sRGB gamut
+  - **Contrast vs 0 · 100**: WCAG contrast ratios against the scale's
+    own darkest and lightest tokens, ✓ at ≥ 4.5
+  - the CSS value (`oklch(L% C H)`) in an output window with a COPY
+    button that copies the colour
 
 ## Functionality
 

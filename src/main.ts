@@ -5,6 +5,7 @@ import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "./style.css";
 import { version } from "../package.json";
+import { contrastRatio, srgbInfo } from "./colorimetry.ts";
 import {
   buildScale,
   PRESETS,
@@ -88,7 +89,7 @@ function syncPresetChips(): void {
   }
 }
 
-function renderInspector(swatch: Swatch): void {
+function renderInspector(swatch: Swatch, darkest: Swatch, lightest: Swatch): void {
   const meter = (label: string, value: string, fraction: number): string => `
     <div class="meter">
       <div class="meter-head"><span>${label}</span><span class="meter-value">${value}</span></div>
@@ -96,15 +97,33 @@ function renderInspector(swatch: Swatch): void {
         <div class="meter-fill" style="width:${Math.min(100, fraction * 100).toFixed(1)}%"></div>
       </div>
     </div>`;
+  const cell = (label: string, value: string): string => `
+    <div class="meter">
+      <div class="meter-head"><span>${label}</span><span class="meter-value">${value}</span></div>
+    </div>`;
+  const ratio = (other: Swatch): string => {
+    const r = contrastRatio(swatch, other);
+    return `${r.toFixed(1)}${r >= 4.5 ? "✓" : ""}`;
+  };
+  const rgb = srgbInfo(swatch);
   inspectorEl.innerHTML = `
-    <div class="monitor-bezel"><div class="monitor" style="background:${swatch.css}"></div></div>
-    <code class="token">${swatch.token}</code>
-    ${meter("Lightness", `${swatch.l}%`, swatch.l / 100)}
-    ${meter("Chroma", String(swatch.c), swatch.c / 0.4)}
-    ${meter("Hue", `${swatch.h}°`, swatch.h / 360)}
-    <div class="value-row">
-      <code class="value">${swatch.css}</code>
-      <button type="button" class="copy-colour" data-colour="${swatch.css}">Copy</button>
+    <div class="osd-screen" style="background:${swatch.css}">
+      <code class="osd-token">${swatch.token}</code>
+      <div class="osd-strip">
+        <div class="osd-values">
+          ${meter("Lightness", `${swatch.l}%`, swatch.l / 100)}
+          ${meter("Chroma", String(swatch.c), swatch.c / 0.4)}
+          ${cell("Hue", `${swatch.h}°`)}
+          ${cell(`sRGB<i class="clip-led${rgb.clipped ? " on" : ""}" title="outside sRGB gamut"></i>`, rgb.hex)}
+          <div class="meter wide">
+            <div class="meter-head"><span>Contrast vs 0 · 100</span><span class="meter-value">${ratio(darkest)} · ${ratio(lightest)}</span></div>
+          </div>
+        </div>
+        <div class="value-row">
+          <code class="value">${swatch.css}</code>
+          <button type="button" class="copy-colour" data-colour="${swatch.css}">Copy</button>
+        </div>
+      </div>
     </div>`;
 }
 
@@ -132,7 +151,7 @@ function render(): void {
   );
   const selected =
     swatches.find((s) => s.step === selectedStep) ?? swatches[Math.floor(swatches.length / 2)];
-  renderInspector(selected);
+  renderInspector(selected, swatches[0], swatches[swatches.length - 1]);
   renderTelemetry(telemetryEl, state, swatches, selectedStep);
   cssEl.textContent = toCssBlock(swatches);
   syncPresetChips();
