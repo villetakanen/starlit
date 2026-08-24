@@ -295,6 +295,26 @@ input[type="range"]::-moz-range-thumb {
   color: var(--text-dim);
 }
 
+/* Hover feedback only on devices that actually hover — avoids
+   sticky-hover states on touch screens. */
+@media (hover: hover) and (pointer: fine) {
+  .preset:hover {
+    border-color: var(--text-dim);
+  }
+
+  .preset[aria-pressed="true"]:hover {
+    border-color: var(--accent);
+  }
+
+  .swatch:hover {
+    box-shadow: inset 0 0 0 2px oklch(100% 0 0 / 0.35);
+  }
+
+  #copy:hover {
+    filter: brightness(1.08);
+  }
+}
+
 /* Desktop: two panes — scale on the left, tuning and output on the right.
    Everything below 768px stays the untouched mobile-first base. */
 @media (min-width: 768px) {
