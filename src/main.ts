@@ -222,20 +222,57 @@ telemetryEl.addEventListener("keydown", (e) => {
   render();
 });
 
+// writeText rejects on more than insecure origins: denied permission, an
+// unfocused document, or a call Safari judges too far from the user gesture.
+// Fall back to a hidden textarea, and report failure rather than going silent.
+const copyText = async (text: string): Promise<boolean> => {
+  if (navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // fall through to the textarea path
+    }
+  }
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.readOnly = true; // keeps the iOS keyboard down
+  ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+  document.body.append(ta);
+  ta.select();
+  ta.setSelectionRange(0, text.length);
+  try {
+    return document.execCommand("copy");
+  } catch {
+    return false;
+  } finally {
+    ta.remove();
+  }
+};
+
+const selectCssBlock = () => {
+  const range = document.createRange();
+  range.selectNodeContents(cssEl);
+  const sel = window.getSelection();
+  sel?.removeAllRanges();
+  sel?.addRange(range);
+};
+
 inspectorEl.addEventListener("click", async (e) => {
   const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".copy-colour");
   if (!btn) return;
-  await navigator.clipboard.writeText(btn.dataset.colour ?? "");
-  btn.textContent = "✓";
+  const ok = await copyText(btn.dataset.colour ?? "");
+  btn.textContent = ok ? "✓" : "✕";
   setTimeout(() => {
     btn.textContent = "Copy";
   }, 1200);
 });
 
 copyBtn.addEventListener("click", async () => {
-  await navigator.clipboard.writeText(toCssBlock(buildScale(state)));
-  copyBtn.textContent = "Copied ✓";
-  copyBtn.classList.add("copied");
+  const ok = await copyText(toCssBlock(buildScale(state)));
+  if (!ok) selectCssBlock();
+  copyBtn.textContent = ok ? "Copied ✓" : "Select + copy";
+  copyBtn.classList.toggle("copied", ok);
   setTimeout(() => {
     copyBtn.textContent = "Copy CSS";
     copyBtn.classList.remove("copied");

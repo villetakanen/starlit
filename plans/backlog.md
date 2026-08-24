@@ -14,17 +14,6 @@ tasks marked with a dependency must follow it. One task = one commit.
   within 0.015–0.035, hue at 50/90/10 equals anchor/solar/shadow inputs.
 - **Test:** `npm test` passes; temporarily breaking `hueAt` makes it fail.
 
-## 2. Clipboard fallback for insecure origins
-
-- [ ] **Why:** `navigator.clipboard` is undefined on plain-http LAN
-      origins — exactly how you demo on a real phone (`vite --host`).
-- **Change:** in `main.ts`, fall back to a hidden textarea +
-  `document.execCommand("copy")` when `navigator.clipboard` is absent or
-  `writeText` rejects.
-- **Test:** `npm run dev -- --host`, open via LAN IP on a phone or with
-  `--unsafely-treat-insecure-origin-as-secure` disabled; Copy CSS still
-  puts the block on the clipboard and shows "Copied ✓".
-
 ## 3. ✅ Active preset indication
 
 - [x] **Why:** no feedback for which preset is applied or that slider
