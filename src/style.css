@@ -350,6 +350,20 @@ body {
   font-weight: 700;
 }
 
+#telemetry .chip-hue {
+  font-family: var(--font-mono);
+  font-size: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+#telemetry .chip-hue.on-light {
+  fill: var(--color-surface-10);
+}
+
+#telemetry .chip-hue.on-dark {
+  fill: var(--color-surface-90);
+}
+
 #telemetry .chip.selected {
   stroke: var(--text);
   stroke-width: 0.75;
