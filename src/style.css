@@ -138,49 +138,71 @@ body {
   gap: 16px;
 }
 
-/* Presets */
-.presets {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: none;
+/* Panel titles */
+.panel-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-dim);
+  margin-bottom: 16px;
 }
 
-.preset {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
+/* Presets */
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  background: var(--surface);
+}
+
+.preset-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  background: var(--surface-2);
   color: var(--text);
-  border: 1px solid var(--surface-2);
-  border-radius: 999px;
-  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 8px;
   font-family: var(--font-ui);
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-align: left;
   cursor: pointer;
   touch-action: manipulation;
 }
 
-.preset::before {
+.preset-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.preset-name::before {
   content: "";
   width: 12px;
   height: 12px;
   border-radius: 50%;
+  flex: 0 0 auto;
   background: var(--dot, var(--accent));
 }
 
-.preset:active {
-  background: var(--surface-2);
+.preset-info {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
 }
 
-.preset[aria-pressed="true"] {
+.preset-card:active {
+  background: var(--color-surface-30);
+}
+
+.preset-card[aria-pressed="true"] {
   border-color: var(--accent);
-  background: var(--surface-2);
 }
 
 /* Swatch strip */
@@ -189,6 +211,9 @@ body {
   flex-direction: column;
   border-radius: var(--radius);
   overflow: hidden;
+  border: none;
+  padding: 0;
+  min-width: 0;
 }
 
 .swatch {
@@ -410,11 +435,11 @@ input[type="range"]::-moz-range-thumb {
 /* Hover feedback only on devices that actually hover — avoids
    sticky-hover states on touch screens. */
 @media (hover: hover) and (pointer: fine) {
-  .preset:hover {
+  .preset-card:hover {
     border-color: var(--text-dim);
   }
 
-  .preset[aria-pressed="true"]:hover {
+  .preset-card[aria-pressed="true"]:hover {
     border-color: var(--accent);
   }
 

@@ -39,7 +39,7 @@ export interface Preset extends ScaleParams {
 
 export const PRESETS: Preset[] = [
   {
-    label: "Nordic Forest",
+    label: "Deep Nordic Forest",
     name: "forest",
     shadowHue: 190,
     anchorHue: 145,
@@ -66,13 +66,31 @@ export const PRESETS: Preset[] = [
     glimmer: 0.9,
   },
   {
-    label: "Mineral Slate",
-    name: "slate",
-    shadowHue: 240,
-    anchorHue: 180,
-    solarHue: 90,
-    peakChroma: 0.05,
-    glimmer: 0.7,
+    label: "Citrus Fruit",
+    name: "citrus",
+    shadowHue: 320,
+    anchorHue: 60,
+    solarHue: 95,
+    peakChroma: 0.18,
+    glimmer: 1.3,
+  },
+  {
+    label: "Urban Asphalt",
+    name: "asphalt",
+    shadowHue: 265,
+    anchorHue: 240,
+    solarHue: 85,
+    peakChroma: 0.035,
+    glimmer: 0.8,
+  },
+  {
+    label: "Blueberry",
+    name: "blueberry",
+    shadowHue: 300,
+    anchorHue: 264,
+    solarHue: 95,
+    peakChroma: 0.16,
+    glimmer: 0.85,
   },
 ];
 

@@ -48,10 +48,16 @@ function renderPresets(): void {
     ...PRESETS.map((preset) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "preset";
-      btn.textContent = preset.label;
+      btn.className = "preset-card";
       const mid = buildScale(preset).find((s) => s.step === 50);
       if (mid) btn.style.setProperty("--dot", mid.css);
+      const name = document.createElement("span");
+      name.className = "preset-name";
+      name.textContent = preset.label;
+      const info = document.createElement("span");
+      info.className = "preset-info";
+      info.textContent = `${preset.shadowHue}°→${preset.anchorHue}°→${preset.solarHue}° · L50`;
+      btn.append(name, info);
       btn.addEventListener("click", () => {
         Object.assign(state, preset);
         activePreset = preset.label;
