@@ -1,0 +1,10 @@
+# Commits must land lint-clean and type-checking. Both commands see the whole
+# tree, not just staged files: Biome's project rules and tsc are cross-file, so
+# a staged-only check would pass on changes that break the build.
+pre-commit:
+  parallel: false
+  jobs:
+    - name: biome
+      run: npx biome check .
+    - name: build
+      run: npm run build
