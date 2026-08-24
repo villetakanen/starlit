@@ -67,6 +67,26 @@ export function renderTelemetry(
   // curve's amplitude must track the knobs honestly — glimmer at 0
   // draws a nearly flat line, not a re-stretched one.
   const maxShift = 0.18;
+
+  // Hue trace: the normalized hue degrees (as shown on the chips) on
+  // an absolute scale — 0° at the bottom of the screen, 360° at the
+  // top. Wrap-around arcs split into segments instead of drawing a
+  // false vertical jump across the 0°/360° seam.
+  const hueTop = SCREEN.top + 10;
+  const hueBottom = SCREEN.top + SCREEN.height - 10;
+  const hueYOf = (h: number): number => hueBottom - (h / 360) * (hueBottom - hueTop);
+  const hueSegments: string[][] = [[]];
+  let prevHue: number | null = null;
+  for (let l = 0; l <= 100; l += 1) {
+    const h = ((hueAtUnwrapped(l, p) % 360) + 360) % 360;
+    if (prevHue !== null && Math.abs(h - prevHue) > 180) hueSegments.push([]);
+    hueSegments[hueSegments.length - 1].push(`${xOfL(l).toFixed(1)},${hueYOf(h).toFixed(1)}`);
+    prevHue = h;
+  }
+  const hueTrace = hueSegments
+    .filter((seg) => seg.length > 1)
+    .map((seg) => `<polyline class="trace-hue" points="${seg.join(" ")}"/>`)
+    .join("");
   const midY = SCREEN.top + SCREEN.height / 2;
   const halfY = SCREEN.height / 2 - 14;
   const shiftPts = shifts
@@ -114,6 +134,7 @@ export function renderTelemetry(
     <rect class="screen" x="0" y="${SCREEN.top}" width="${W}" height="${SCREEN.height}" rx="8"/>
     ${grid}
     ${shiftTrace}
+    ${hueTrace}
     ${selected}
     ${axis}
   </svg>`;
