@@ -3,7 +3,7 @@
   "description": "Mobile-first studio for hue-shifting OKLCH color token scales",
   "license": "MIT",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "scripts": {
     "prepare": "lefthook install",
