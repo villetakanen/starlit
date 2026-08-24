@@ -130,6 +130,12 @@ body {
   font-size: 0.75rem;
 }
 
+/* Gradient continuity strip */
+.gradient {
+  height: 24px;
+  border-radius: 12px;
+}
+
 /* Inspector */
 .inspector {
   display: flex;

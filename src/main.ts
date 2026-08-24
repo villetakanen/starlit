@@ -14,6 +14,7 @@ const $ = <T extends HTMLElement>(sel: string): T => {
 
 const presetsEl = $("#presets");
 const stripEl = $("#strip");
+const gradientEl = $("#gradient");
 const inspectorEl = $("#inspector");
 const cssEl = $("#css code");
 const copyBtn = $<HTMLButtonElement>("#copy");
@@ -100,6 +101,8 @@ function render(): void {
   const selected =
     swatches.find((s) => s.step === selectedStep) ?? swatches[Math.floor(swatches.length / 2)];
   renderInspector(selected);
+  const stops = swatches.map((s) => `${s.css} ${s.step}%`).join(", ");
+  gradientEl.style.background = `linear-gradient(to right, ${stops})`;
   cssEl.textContent = toCssBlock(swatches);
   syncPresetChips();
 }
