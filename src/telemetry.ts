@@ -63,7 +63,10 @@ export function renderTelemetry(
     const d = Math.hypot(c * Math.cos(h * RAD) - c0 * a0, c * Math.sin(h * RAD) - c0 * b0);
     shifts.push((Math.sign(h - anchorHue) || 1) * d);
   }
-  const maxShift = Math.max(0.02, ...shifts.map(Math.abs)) * 1.15;
+  // Fixed full-scale (ΔE_ab in OKLab), NOT normalized per render: the
+  // curve's amplitude must track the knobs honestly — glimmer at 0
+  // draws a nearly flat line, not a re-stretched one.
+  const maxShift = 0.18;
   const midY = SCREEN.top + SCREEN.height / 2;
   const halfY = SCREEN.height / 2 - 14;
   const shiftPts = shifts
