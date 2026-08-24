@@ -65,7 +65,7 @@ body {
 .header-inner {
   max-width: 480px;
   margin: 0 auto;
-  padding: max(16px, env(safe-area-inset-top)) 16px 16px;
+  padding: max(8px, env(safe-area-inset-top)) 16px 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -91,7 +91,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.09em;
-  padding: 8px 16px;
+  padding: 4px 12px;
   border-radius: 999px;
 }
 
@@ -436,7 +436,7 @@ input[type="range"]::-moz-range-thumb {
 @media (min-width: 768px) {
   .header-inner {
     max-width: none;
-    padding: 16px 24px;
+    padding: 8px 24px;
   }
 
   #app {
