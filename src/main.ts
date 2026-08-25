@@ -6,6 +6,7 @@ import "@fontsource/ibm-plex-mono/500.css";
 import "./style.css";
 import { version } from "../package.json";
 import { contrastRatio, srgbInfo } from "./colorimetry.ts";
+import { paramsFromRoute, routeFromParams } from "./route.ts";
 import {
   buildScale,
   PRESETS,
@@ -17,9 +18,12 @@ import {
 } from "./scale.ts";
 import { fractionToStepIndex, renderTelemetry } from "./telemetry.ts";
 
-const state: ScaleParams = { ...PRESETS[0] };
+// The route is the source of truth for the model on load; an empty one
+// resolves to the default preset, so this is also the cold-start state.
+const hydrated = paramsFromRoute(window.location.search);
+const state: ScaleParams = hydrated.params;
 let selectedStep = 50;
-let activePreset: string | null = PRESETS[0].label;
+let activePreset: string | null = hydrated.preset;
 const presetButtons = new Map<string, HTMLButtonElement>();
 
 const $ = <T extends HTMLElement>(sel: string): T => {
@@ -144,6 +148,18 @@ function anchorStepOf(anchorL: number): number {
   );
 }
 
+// Sliders fire per pixel of drag; replaceState keeps the back button
+// pointing where the user came from rather than at every intermediate
+// scale, and the debounce keeps us off the history API on every frame.
+let routeTimer: number | undefined;
+function syncRoute(): void {
+  clearTimeout(routeTimer);
+  routeTimer = window.setTimeout(() => {
+    const query = routeFromParams(state, activePreset);
+    window.history.replaceState(null, "", `${window.location.pathname}?${query}`);
+  }, 200);
+}
+
 function render(): void {
   const swatches = buildScale(state);
   const anchorStep = anchorStepOf(state.anchorL);
@@ -184,6 +200,7 @@ function render(): void {
   renderTelemetry(telemetryEl, state, swatches, selectedStep);
   cssEl.textContent = toCssBlock(swatches);
   syncPresetChips();
+  syncRoute();
 }
 
 for (const key of SLIDERS) {
@@ -298,6 +315,14 @@ copyBtn.addEventListener("click", async () => {
     copyBtn.textContent = "Copy CSS";
     copyBtn.classList.remove("copied");
   }, 1200);
+});
+
+window.addEventListener("popstate", () => {
+  const next = paramsFromRoute(window.location.search);
+  Object.assign(state, next.params);
+  activePreset = next.preset;
+  syncControls();
+  render();
 });
 
 $("#version").textContent = `v${version}`;

@@ -37,6 +37,6 @@ framework, no CDN dependencies (fonts self-hosted via Fontsource).
 - Work items live in GitHub issues (`gh issue list`) — atomic tasks, one
   task = one commit, close the issue from the commit that lands it.
 - Work lands on `dev`; a PR from `dev` to `main` is the release. `main`
-  is production — never commit to it directly. Netlify builds `dev` as a
-  branch deploy and every PR as a preview (`netlify.toml`).
+  is production — never commit to it directly. Netlify builds `main` and
+  pull requests only; `dev` itself is not deployed.
 - Run `pnpm exec biome check --write .` and `pnpm build` before committing.

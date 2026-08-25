@@ -2,10 +2,11 @@
 # model in the repo rather than in the Netlify UI.
 #
 # main → production      https://starlit-scale.netlify.app
-# dev  → branch deploy   https://dev--starlit-scale.netlify.app
 # PR   → deploy preview  https://deploy-preview-<n>--starlit-scale.netlify.app
 #
-# Work lands on dev; a PR from dev to main is the release.
+# Only main and pull requests build. Work lands on dev, which is
+# deliberately not deployed — a PR from dev to main is the release, and
+# the preview on that PR is what gets reviewed.
 
 [build]
   command = "pnpm build"
@@ -18,7 +19,4 @@
 # `pnpm build` is tsc + vite build, so a type error already fails the
 # deploy. Lint separately: Biome warnings are errors here, as in lefthook.
 [context.deploy-preview]
-  command = "pnpm lint && pnpm build"
-
-[context.branch-deploy]
   command = "pnpm lint && pnpm build"

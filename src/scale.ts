@@ -48,6 +48,35 @@ export interface ScaleParams {
 /** Diffuse skylight hue from Rayleigh scattering (I ∝ λ⁻⁴). */
 export const SKY_HUE = 245;
 
+/** Numeric parameters, i.e. everything but `name` and `subsurface`. */
+export type NumericParamKey =
+  | "anchorHue"
+  | "anchorL"
+  | "peakChroma"
+  | "solarHue"
+  | "skyFactor"
+  | "glimmer";
+
+export interface ParamBounds {
+  min: number;
+  max: number;
+  step: number;
+}
+
+/**
+ * Legal range of every numeric parameter — the one authority for what a
+ * value may be, whether it arrives from a slider or from the route. The
+ * `input[type=range]` attributes in index.html mirror these.
+ */
+export const PARAM_BOUNDS: Record<NumericParamKey, ParamBounds> = {
+  anchorHue: { min: 0, max: 360, step: 1 },
+  anchorL: { min: 20, max: 80, step: 10 },
+  peakChroma: { min: 0.01, max: 0.32, step: 0.005 },
+  solarHue: { min: 75, max: 105, step: 1 },
+  skyFactor: { min: 0, max: 1, step: 0.05 },
+  glimmer: { min: 0, max: 2, step: 0.05 },
+};
+
 export interface Swatch {
   step: number;
   l: number;
