@@ -36,4 +36,7 @@ dependencies (fonts self-hosted via Fontsource).
   wider viewports only add, never change, the base.
 - Work items live in GitHub issues (`gh issue list`) — atomic tasks, one
   task = one commit, close the issue from the commit that lands it.
+- Work lands on `dev`; a PR from `dev` to `main` is the release. `main`
+  is production — never commit to it directly. Netlify builds `dev` as a
+  branch deploy and every PR as a preview (`netlify.toml`).
 - Run `npx biome check --write .` and `npm run build` before committing.

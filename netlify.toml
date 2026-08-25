@@ -1,0 +1,24 @@
+# Build settings for every context. Committing these keeps the branch
+# model in the repo rather than in the Netlify UI.
+#
+# main → production      https://starlit-scale.netlify.app
+# dev  → branch deploy   https://dev--starlit-scale.netlify.app
+# PR   → deploy preview  https://deploy-preview-<n>--starlit-scale.netlify.app
+#
+# Work lands on dev; a PR from dev to main is the release.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Match the local toolchain; Vite 8 and TypeScript 6 want a modern Node.
+  NODE_VERSION = "24"
+
+# `npm run build` is tsc + vite build, so a type error already fails the
+# deploy. Lint separately: Biome warnings are errors here, as in lefthook.
+[context.deploy-preview]
+  command = "npm run lint && npm run build"
+
+[context.branch-deploy]
+  command = "npm run lint && npm run build"
