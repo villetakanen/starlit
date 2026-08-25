@@ -3,8 +3,9 @@
   "description": "Mobile-first studio for hue-shifting OKLCH color token scales",
   "license": "MIT",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "prepare": "lefthook install",
     "dev": "vite",
@@ -22,5 +23,12 @@
   "dependencies": {
     "@fontsource/barlow": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "esbuild",
+      "lefthook"
+    ]
   }
 }
