@@ -19,8 +19,8 @@ the dual-light physics of natural materials:
 ## Usage
 
 ```sh
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Pick a preset (Nordic Forest, Rowan Berry, Hanami Sakura, Mineral Slate) or
@@ -30,10 +30,10 @@ generated `:root { --chroma-<family>-<step>: … }` block with one tap.
 
 ## Scripts
 
-- `npm run dev` — start the Vite dev server
-- `npm run build` — type-check and build for production
-- `npm run lint` — lint with Biome
-- `npm run format` — format with Biome
+- `pnpm dev` — start the Vite dev server
+- `pnpm build` — type-check and build for production
+- `pnpm lint` — lint with Biome
+- `pnpm format` — format with Biome
 
 ## License
 

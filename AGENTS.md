@@ -1,8 +1,8 @@
 # Starlit — agent notes
 
 Mobile-first studio for hue-shifting OKLCH color token scales.
-Vanilla TypeScript + Vite, Biome for lint/format, no framework, no CDN
-dependencies (fonts self-hosted via Fontsource).
+Vanilla TypeScript + Vite, pnpm for packages, Biome for lint/format, no
+framework, no CDN dependencies (fonts self-hosted via Fontsource).
 
 ## ASK
 
@@ -10,10 +10,10 @@ dependencies (fonts self-hosted via Fontsource).
 
 ## Commands
 
-- `npm run dev` — Vite dev server (port 5173)
-- `npm run build` — type-check and build
-- `npm run lint` — Biome check
-- `npm run format` — Biome format
+- `pnpm dev` — Vite dev server (port 5173)
+- `pnpm build` — type-check and build
+- `pnpm lint` — Biome check
+- `pnpm format` — Biome format
 
 ## Layout of the code
 
@@ -39,4 +39,4 @@ dependencies (fonts self-hosted via Fontsource).
 - Work lands on `dev`; a PR from `dev` to `main` is the release. `main`
   is production — never commit to it directly. Netlify builds `dev` as a
   branch deploy and every PR as a preview (`netlify.toml`).
-- Run `npx biome check --write .` and `npm run build` before committing.
+- Run `pnpm exec biome check --write .` and `pnpm build` before committing.
